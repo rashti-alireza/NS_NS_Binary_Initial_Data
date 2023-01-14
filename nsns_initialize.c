@@ -72,7 +72,7 @@ static Physics_T *infer_new_physics(Physics_T *const old_bhns)
   
   Physics_T *const nsns = init_physics(0,BHNS);/* the whole system */
   Physics_T *const bh   = init_physics(nsns,BH);/* BH part */
-  Physics_T *const ns   = init_physics(nsns,NS);/* NS part */
+  Physics_T *const ns2   = init_physics(nsns,NS);/* NS part */
   Physics_T *const old_bh = init_physics(old_bhns,BH);/* BH part */
   Physics_T *const old_ns = init_physics(old_bhns,NS);/* NS part */
   Grid_Char_T *const grid_char = init_grid_char(0);
@@ -99,7 +99,7 @@ static Physics_T *infer_new_physics(Physics_T *const old_bhns)
   /* new grid */
   create_new_grid(grid_char,nsns);
   bh->grid = nsns->grid;
-  ns->grid = nsns->grid;
+  ns2->grid = nsns->grid;
   
   /* set and update parameters */
   update_params(nsns);
@@ -135,7 +135,7 @@ static Physics_T *infer_new_physics(Physics_T *const old_bhns)
   /* update derivatives */
   update_partial_derivatives(nsns,".*","^dpsi_D.$,^ddpsi_D.D.$,"
                                       "^dalphaPsi_D.$,^ddalphaPsi_D.D.$");
-  update_partial_derivatives(ns,"NS","^dphi_D.$,^ddphi_D.D.$");
+  update_partial_derivatives(ns2,"NS","^dphi_D.$,^ddphi_D.D.$");
   
   /* update AConf^{ij} */
   physics(nsns,ADM_UPDATE_AConfIJ);
@@ -145,11 +145,11 @@ static Physics_T *infer_new_physics(Physics_T *const old_bhns)
   
   /* update matter fields */
   Psets("NS_enthalpy_neat","yes");
-  physics(ns,STRESS_ENERGY_UPDATE);
+  physics(ns2,STRESS_ENERGY_UPDATE);
   
   /* free */
   free_physics(bh);
-  free_physics(ns);
+  free_physics(ns2);
   free_physics(old_bh);
   free_physics(old_ns);
   free_grid_char(grid_char);
@@ -165,7 +165,7 @@ static Physics_T *guess_new_physics(void)
   
   Physics_T *const nsns = init_physics(0,BHNS);/* the whole system */
   Physics_T *const bh   = init_physics(nsns,BH);/* BH part */
-  Physics_T *const ns   = init_physics(nsns,NS);/* NS part */
+  Physics_T *const ns2   = init_physics(nsns,NS);/* NS part */
   Grid_Char_T *const grid_char = init_grid_char(0);
   
   /* set parameters */
@@ -180,15 +180,15 @@ static Physics_T *guess_new_physics(void)
   /* create grid */
   bh->grid_char = grid_char;
   bh->igc       = Ibh;
-  ns->grid_char = grid_char;
-  ns->igc       = Ins;
+  ns2->grid_char = grid_char;
+  ns2->igc       = Ins;
   physics(bh,BH_START);
   physics(bh,BH_FIND_SURFACE);
-  physics(ns,STAR_START);
-  physics(ns,STAR_FIND_SURFACE);
+  physics(ns2,STAR_START);
+  physics(ns2,STAR_FIND_SURFACE);
   create_new_grid(grid_char,nsns);
   bh->grid = nsns->grid;
-  ns->grid = nsns->grid;
+  ns2->grid = nsns->grid;
   
   /* add fields */
   physics(nsns,ADM_ADD_FIELDS);
@@ -211,7 +211,7 @@ static Physics_T *guess_new_physics(void)
   /* update derivatives */
   update_partial_derivatives(nsns,".*","^dpsi_D.$,^ddpsi_D.D.$,"
                                       "^dalphaPsi_D.$,^ddalphaPsi_D.D.$");
-  update_partial_derivatives(ns,"NS","^dphi_D.$,^ddphi_D.D.$");
+  update_partial_derivatives(ns2,"NS","^dphi_D.$,^ddphi_D.D.$");
   
   /* update AConf^{ij} */
   physics(nsns,ADM_UPDATE_AConfIJ);
@@ -221,13 +221,13 @@ static Physics_T *guess_new_physics(void)
   
   /* update stress energy-tensor */
   Psetd("NS_Euler_equation_constant",
-        star_NS_current_Euler_eq_const(ns));
+        star_NS_current_Euler_eq_const(ns2));
   Psets("NS_enthalpy_neat","yes");
-  physics(ns,STRESS_ENERGY_UPDATE);
+  physics(ns2,STRESS_ENERGY_UPDATE);
   
   /* free */
   free_physics(bh);
-  free_physics(ns);
+  free_physics(ns2);
   free_grid_char(grid_char);
   
   FUNC_TOC
@@ -309,7 +309,7 @@ static void
       else
         update_ns_surface = 0;
     }
-    /* save new values if ns surface must change */
+    /* save new values if ns2 surface must change */
     if (update_ns_surface)
     {
       n = Ncoeffs_Ylm(grid_char->params[Ins]->lmax);
@@ -459,7 +459,7 @@ Physics_T *nsns_read_physics_from_checkpoint(void)
     return 0;
   }
   
-  Physics_T *const ns = init_physics(nsns,NS);
+  Physics_T *const ns2 = init_physics(nsns,NS);
   Physics_T *const bh = init_physics(nsns,BH);
   
   /* make the patches */
@@ -495,7 +495,7 @@ Physics_T *nsns_read_physics_from_checkpoint(void)
   Fclose(file);
   
   /* alse we need NS spin vector */
-  star_W_spin_vector_idealfluid_update(ns,"NS");
+  star_W_spin_vector_idealfluid_update(ns2,"NS");
   
   /* beta = B0+B1 */
   physics(nsns,ADM_UPDATE_B1I);
@@ -505,7 +505,7 @@ Physics_T *nsns_read_physics_from_checkpoint(void)
   /* update derivatives */
   update_partial_derivatives(nsns,".*","^dpsi_D.$,^ddpsi_D.D.$,"
                                       "^dalphaPsi_D.$,^ddalphaPsi_D.D.$");
-  update_partial_derivatives(ns,"NS","^dphi_D.$,^ddphi_D.D.$");
+  update_partial_derivatives(ns2,"NS","^dphi_D.$,^ddphi_D.D.$");
   
   /* update AConf^{ij} */
   physics(nsns,ADM_UPDATE_AConfIJ);
@@ -515,9 +515,9 @@ Physics_T *nsns_read_physics_from_checkpoint(void)
   
   /* update matter fields */
   Psets("NS_enthalpy_neat","yes");
-  physics(ns,STRESS_ENERGY_UPDATE);
+  physics(ns2,STRESS_ENERGY_UPDATE);
   
-  free_physics(ns);
+  free_physics(ns2);
   free_physics(bh);
 
   FUNC_TOC

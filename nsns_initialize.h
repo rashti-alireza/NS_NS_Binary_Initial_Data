@@ -3,7 +3,7 @@
 
 /* index of bh */
 #define Ibh (0)
-/* index of ns */
+/* index of ns2 */
 #define Ins (1)
 
 /* encapsulate use last NS surface for multiple uses */

@@ -143,8 +143,8 @@ adm_Kij_D2D2[ijk];
   }
   if (IsItCovering(patch,"NS"))
   {
-  Physics_T *ns = init_physics(0,NS);
-  EoS_T *eos    = init_EoS(ns);
+  Physics_T *ns2 = init_physics(0,NS);
+  EoS_T *eos    = init_EoS(ns2);
   FOR_ALL_ijk
   {
   double psim4 =
@@ -183,7 +183,7 @@ enthalpy[ijk]*u0[ijk]);
    bam_grhd_epsl[ijk] = eos->specific_internal_energy(eos);
   }
   }
-  free_physics(ns);
+  free_physics(ns2);
   free_EoS(eos);
   }
   }
