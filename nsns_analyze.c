@@ -5,10 +5,10 @@
 
 /* analyzing initial data such as mass, momentum, constraints etc.  */
 
-#include "bhns_analyze.h"
+#include "nsns_analyze.h"
 
 /* analyzing physics properties, constraints etc */
-void bhns_analyze(Physics_T *const phys,const int iteration)
+void nsns_analyze(Physics_T *const phys,const int iteration)
 {
   if (!phys) return;
 
@@ -27,13 +27,13 @@ void bhns_analyze(Physics_T *const phys,const int iteration)
   /* open properties file in "my_directory" and save */
   sprintf(str,"%s/%s",Pgets(P_"my_directory"),properties_file_name);
   file = Fopen(str,"w");
-  bhns_print_physical_system_properties(phys,file,iteration,0);
+  nsns_print_physical_system_properties(phys,file,iteration,0);
   Fclose(file);
 
   /* open properties file in "Diagnostics" and save */
   sprintf(str,"%s/%s",Pgets(P_"Diagnostics"),properties_file_name);
   file = Fopen(str,"a");
-  bhns_print_physical_system_properties(phys,file,iteration,0);
+  nsns_print_physical_system_properties(phys,file,iteration,0);
   Fclose(file);
   
   /* prints */
@@ -47,7 +47,7 @@ void bhns_analyze(Physics_T *const phys,const int iteration)
 
 /* print physical system properties such as mass, spin etc in the given
 // file, if pr_screen is 1, it also prints in stdout */
-void bhns_print_physical_system_properties(Physics_T *const phys,
+void nsns_print_physical_system_properties(Physics_T *const phys,
                                           FILE *const file,
                                           const int iteration,
                                           const int pr_screen)
@@ -75,7 +75,7 @@ void bhns_print_physical_system_properties(Physics_T *const phys,
 // NOTE: order of parameter calculations matter. 
 // NOTE: if there is a confusion between target params and current
 //       params, "current" suffix added to the latter. */
-static void compute_properties(Physics_T *const phys/* bhns */)
+static void compute_properties(Physics_T *const phys/* nsns */)
 {
   Physics_T *const ns = init_physics(phys,NS);
   Physics_T *const bh = init_physics(phys,BH);

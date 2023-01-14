@@ -1,4 +1,4 @@
-#include "bhns_header.h"
+#include "nsns_header.h"
 #include "maths_equation_solvings_lib.h"
 
 /* index of bh */
@@ -31,11 +31,11 @@
   Pseti("NS_did_NS_surface_change?",0);
 
 
-Physics_T *bhns_initialize_new_physics(Physics_T *const old_phys);
+Physics_T *nsns_initialize_new_physics(Physics_T *const old_phys);
 static Physics_T *guess_new_physics(void);
 
 static void 
-  create_new_grid(Grid_Char_T *const grid_char,Physics_T *const bhns);
+  create_new_grid(Grid_Char_T *const grid_char,Physics_T *const nsns);
 
 
 static void update_partial_derivatives(Physics_T *const phys,
@@ -46,7 +46,7 @@ static void initial_B0I(Physics_T *const phys,
                        const char *const region);
 
 
-Physics_T *bhns_read_physics_from_checkpoint(void);
+Physics_T *nsns_read_physics_from_checkpoint(void);
 static Physics_T *infer_new_physics(Physics_T *const old_phys);
 static void initialize_fields_using_previous_solve
             (Physics_T *const new_phys,Physics_T *const old_phys);

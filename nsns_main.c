@@ -3,7 +3,7 @@
 // January 2021
 */
 
-#include "bhns_main.h"
+#include "nsns_main.h"
 
 
 /* initial data for BH-NS binary system */
@@ -11,7 +11,7 @@ int BH_NS_Binary_Initial_Data(void *vp)
 {
   /* if this is a BAM call */
   if (strcmp_i(PgetsEZ(P_"bam_export_id"),"yes"))
-    bhns_bam_exporting_initial_data(vp);
+    nsns_bam_exporting_initial_data(vp);
   
   /* otherwise construct initial data */
   else
@@ -39,13 +39,13 @@ static void construct_initial_data(void *vp)
     
     Stop = update_iteration_params(iter,P_,P_"%s_%ux%ux%u");
     
-    new_phys = bhns_initialize_new_physics(old_phys);
+    new_phys = nsns_initialize_new_physics(old_phys);
     
     write_checkpoint(new_phys,Pgets(P_"my_directory"));
     
-    bhns_solve_equation(new_phys);
+    nsns_solve_equation(new_phys);
     
-    bhns_analyze(new_phys,Pgeti(P_"resolution_iteration"));
+    nsns_analyze(new_phys,Pgeti(P_"resolution_iteration"));
     
     free_physics(old_phys);
     

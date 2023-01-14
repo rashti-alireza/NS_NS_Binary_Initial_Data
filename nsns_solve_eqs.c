@@ -5,10 +5,10 @@
 
 /* solving physics equations (elliptic solve) */
 
-#include "bhns_solve_eqs.h"
+#include "nsns_solve_eqs.h"
 
 /* setup and issue physics solve */
-void bhns_solve_equation(Physics_T *const phys)
+void nsns_solve_equation(Physics_T *const phys)
 {
   if (!phys) return;
   
@@ -32,7 +32,7 @@ void bhns_solve_equation(Physics_T *const phys)
   eq_field_update  = field_update;
   eq_source_update = source_update;
   eq_stop_criteria = stop_criteria;
-  eq_analyze_solution = bhns_analyze;
+  eq_analyze_solution = nsns_analyze;
 
   /* solve */
   physics(phys,EQ_SOLVE);
@@ -148,13 +148,13 @@ static int stop_criteria(Grid_T *const grid,const char *const name)
 /* how update sourc */
 static void source_update(Grid_T *const grid,const char *const name)
 {
-  Physics_T *const bhns = init_physics(0,BHNS);
-  bhns->grid            = grid;
+  Physics_T *const nsns = init_physics(0,BHNS);
+  nsns->grid            = grid;
   
-  physics(bhns,ADM_UPDATE_AConfIJ);
+  physics(nsns,ADM_UPDATE_AConfIJ);
   
-  bhns->grid = 0;/* don't free grid */
-  free_physics(bhns);
+  nsns->grid = 0;/* don't free grid */
+  free_physics(nsns);
   
   UNUSED(name);
 }

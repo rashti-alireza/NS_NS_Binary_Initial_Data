@@ -1,4 +1,4 @@
-#include "bhns_header.h"
+#include "nsns_header.h"
 #include "TOV_lib.h"
 #include "physics_star_lib.h"
 
@@ -7,13 +7,13 @@
 #define LINE_STR    "-------------------------------------------------------------------------"
 
 
-void bhns_print_physical_system_properties(Physics_T *const phys,
+void nsns_print_physical_system_properties(Physics_T *const phys,
                                           FILE *const file,
                                           const int iteration,
                                           const int pr_screen);
 
-void bhns_analyze(Physics_T *const phys,const int iteration);
-static void compute_properties(Physics_T *const phys/* bhns */);
+void nsns_analyze(Physics_T *const phys,const int iteration);
+static void compute_properties(Physics_T *const phys/* nsns */);
 
 
 

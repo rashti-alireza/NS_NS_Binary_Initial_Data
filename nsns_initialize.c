@@ -6,10 +6,10 @@
 /* various functions needed to make a physics object for BH-NS */
 
 
-#include "bhns_initialize.h"
+#include "nsns_initialize.h"
 
 /* decide how to initialize the new physics */
-Physics_T *bhns_initialize_new_physics(Physics_T *const old_phys)
+Physics_T *nsns_initialize_new_physics(Physics_T *const old_phys)
 {
   Physics_T *new_phys = 0;
   
@@ -44,12 +44,12 @@ Physics_T *bhns_initialize_new_physics(Physics_T *const old_phys)
       Psets(CHECKPOINT_SET_PARAM_ P_"Diagnostics", 
             Pgets("top_directory"));
       
-      new_phys = bhns_read_physics_from_checkpoint();
+      new_phys = nsns_read_physics_from_checkpoint();
     }
     
     /* can we resume from a useful checkpoint file */
     else if (can_we_use_checkpoint(Pgets("top_directory")))
-      new_phys = bhns_read_physics_from_checkpoint();
+      new_phys = nsns_read_physics_from_checkpoint();
       
     else 
       new_phys = guess_new_physics();
@@ -70,9 +70,9 @@ static Physics_T *infer_new_physics(Physics_T *const old_bhns)
   
   FUNC_TIC
   
-  Physics_T *const bhns = init_physics(0,BHNS);/* the whole system */
-  Physics_T *const bh   = init_physics(bhns,BH);/* BH part */
-  Physics_T *const ns   = init_physics(bhns,NS);/* NS part */
+  Physics_T *const nsns = init_physics(0,BHNS);/* the whole system */
+  Physics_T *const bh   = init_physics(nsns,BH);/* BH part */
+  Physics_T *const ns   = init_physics(nsns,NS);/* NS part */
   Physics_T *const old_bh = init_physics(old_bhns,BH);/* BH part */
   Physics_T *const old_ns = init_physics(old_bhns,NS);/* NS part */
   Grid_Char_T *const grid_char = init_grid_char(0);
@@ -97,48 +97,48 @@ static Physics_T *infer_new_physics(Physics_T *const old_bhns)
   physics(old_ns,STAR_FIND_SURFACE);
   
   /* new grid */
-  create_new_grid(grid_char,bhns);
-  bh->grid = bhns->grid;
-  ns->grid = bhns->grid;
+  create_new_grid(grid_char,nsns);
+  bh->grid = nsns->grid;
+  ns->grid = nsns->grid;
   
   /* set and update parameters */
-  update_params(bhns);
-  physics(bhns,FREE_DATA_SET_PARAMS);
-  physics(bhns,ADM_SET_PARAMS);
-  physics(bhns,SYS_SET_PARAMS);
-  physics(bhns,STRESS_ENERGY_SET_PARAMS);
-  physics(bhns,OBSERVE_SET_PARAMS);  
-  physics(bhns,BH_SET_PARAMS);
-  physics(bhns,STAR_SET_PARAMS);
+  update_params(nsns);
+  physics(nsns,FREE_DATA_SET_PARAMS);
+  physics(nsns,ADM_SET_PARAMS);
+  physics(nsns,SYS_SET_PARAMS);
+  physics(nsns,STRESS_ENERGY_SET_PARAMS);
+  physics(nsns,OBSERVE_SET_PARAMS);  
+  physics(nsns,BH_SET_PARAMS);
+  physics(nsns,STAR_SET_PARAMS);
   
   /* add fields */
-  physics(bhns,ADM_ADD_FIELDS);
-  physics(bhns,FREE_DATA_ADD_FIELDS);
-  physics(bhns,STRESS_ENERGY_ADD_FIELDS);
-  physics(bhns,SYS_ADD_FIELDS);
-  physics(bhns,OBSERVE_ADD_FIELDS);
-  physics(bhns,BH_ADD_FIELDS);
-  physics(bhns,STAR_ADD_FIELDS);
+  physics(nsns,ADM_ADD_FIELDS);
+  physics(nsns,FREE_DATA_ADD_FIELDS);
+  physics(nsns,STRESS_ENERGY_ADD_FIELDS);
+  physics(nsns,SYS_ADD_FIELDS);
+  physics(nsns,OBSERVE_ADD_FIELDS);
+  physics(nsns,BH_ADD_FIELDS);
+  physics(nsns,STAR_ADD_FIELDS);
   
   /* populate fields */
-  physics(bhns,FREE_DATA_POPULATE);
-  initialize_fields_using_previous_solve(bhns,old_bhns);
+  physics(nsns,FREE_DATA_POPULATE);
+  initialize_fields_using_previous_solve(nsns,old_bhns);
   
   /* move Jacobian if possible */
-  move_jacobian(bhns,old_bhns);
+  move_jacobian(nsns,old_bhns);
   
   /* beta = B0+B1 */
-  physics(bhns,ADM_UPDATE_B1I);
-  update_partial_derivatives(bhns,".*","^dB0_U.+,^ddB0_U.+");
-  physics(bhns,ADM_UPDATE_beta);
+  physics(nsns,ADM_UPDATE_B1I);
+  update_partial_derivatives(nsns,".*","^dB0_U.+,^ddB0_U.+");
+  physics(nsns,ADM_UPDATE_beta);
   
   /* update derivatives */
-  update_partial_derivatives(bhns,".*","^dpsi_D.$,^ddpsi_D.D.$,"
+  update_partial_derivatives(nsns,".*","^dpsi_D.$,^ddpsi_D.D.$,"
                                       "^dalphaPsi_D.$,^ddalphaPsi_D.D.$");
   update_partial_derivatives(ns,"NS","^dphi_D.$,^ddphi_D.D.$");
   
   /* update AConf^{ij} */
-  physics(bhns,ADM_UPDATE_AConfIJ);
+  physics(nsns,ADM_UPDATE_AConfIJ);
   
   /* update normal on AH */
   physics(bh,BH_UPDATE_sConf);
@@ -155,7 +155,7 @@ static Physics_T *infer_new_physics(Physics_T *const old_bhns)
   free_grid_char(grid_char);
   
   FUNC_TOC
-  return bhns;
+  return nsns;
 }  
 
 /* use a known BH and NS solution to initialize the physics */
@@ -163,19 +163,19 @@ static Physics_T *guess_new_physics(void)
 {
   FUNC_TIC
   
-  Physics_T *const bhns = init_physics(0,BHNS);/* the whole system */
-  Physics_T *const bh   = init_physics(bhns,BH);/* BH part */
-  Physics_T *const ns   = init_physics(bhns,NS);/* NS part */
+  Physics_T *const nsns = init_physics(0,BHNS);/* the whole system */
+  Physics_T *const bh   = init_physics(nsns,BH);/* BH part */
+  Physics_T *const ns   = init_physics(nsns,NS);/* NS part */
   Grid_Char_T *const grid_char = init_grid_char(0);
   
   /* set parameters */
-  physics(bhns,FREE_DATA_SET_PARAMS);
-  physics(bhns,ADM_SET_PARAMS);
-  physics(bhns,SYS_SET_PARAMS);
-  physics(bhns,STRESS_ENERGY_SET_PARAMS);
-  physics(bhns,OBSERVE_SET_PARAMS);  
-  physics(bhns,BH_SET_PARAMS);
-  physics(bhns,STAR_SET_PARAMS);
+  physics(nsns,FREE_DATA_SET_PARAMS);
+  physics(nsns,ADM_SET_PARAMS);
+  physics(nsns,SYS_SET_PARAMS);
+  physics(nsns,STRESS_ENERGY_SET_PARAMS);
+  physics(nsns,OBSERVE_SET_PARAMS);  
+  physics(nsns,BH_SET_PARAMS);
+  physics(nsns,STAR_SET_PARAMS);
   
   /* create grid */
   bh->grid_char = grid_char;
@@ -186,35 +186,35 @@ static Physics_T *guess_new_physics(void)
   physics(bh,BH_FIND_SURFACE);
   physics(ns,STAR_START);
   physics(ns,STAR_FIND_SURFACE);
-  create_new_grid(grid_char,bhns);
-  bh->grid = bhns->grid;
-  ns->grid = bhns->grid;
+  create_new_grid(grid_char,nsns);
+  bh->grid = nsns->grid;
+  ns->grid = nsns->grid;
   
   /* add fields */
-  physics(bhns,ADM_ADD_FIELDS);
-  physics(bhns,FREE_DATA_ADD_FIELDS);
-  physics(bhns,STRESS_ENERGY_ADD_FIELDS);
-  physics(bhns,SYS_ADD_FIELDS);
-  physics(bhns,OBSERVE_ADD_FIELDS);
-  physics(bhns,BH_ADD_FIELDS);
-  physics(bhns,STAR_ADD_FIELDS);
+  physics(nsns,ADM_ADD_FIELDS);
+  physics(nsns,FREE_DATA_ADD_FIELDS);
+  physics(nsns,STRESS_ENERGY_ADD_FIELDS);
+  physics(nsns,SYS_ADD_FIELDS);
+  physics(nsns,OBSERVE_ADD_FIELDS);
+  physics(nsns,BH_ADD_FIELDS);
+  physics(nsns,STAR_ADD_FIELDS);
   
   /* populate fields */
-  physics(bhns,FREE_DATA_POPULATE);
-  physics(bhns,SYS_INITIALIZE_FIELDS);
+  physics(nsns,FREE_DATA_POPULATE);
+  physics(nsns,SYS_INITIALIZE_FIELDS);
   /* beta = B0+B1 */
-  physics(bhns,ADM_UPDATE_B1I);
-  initial_B0I(bhns,".*");
-  update_partial_derivatives(bhns,".*","^dB0_U.+,^ddB0_U.+");
-  physics(bhns,ADM_UPDATE_beta);
+  physics(nsns,ADM_UPDATE_B1I);
+  initial_B0I(nsns,".*");
+  update_partial_derivatives(nsns,".*","^dB0_U.+,^ddB0_U.+");
+  physics(nsns,ADM_UPDATE_beta);
   
   /* update derivatives */
-  update_partial_derivatives(bhns,".*","^dpsi_D.$,^ddpsi_D.D.$,"
+  update_partial_derivatives(nsns,".*","^dpsi_D.$,^ddpsi_D.D.$,"
                                       "^dalphaPsi_D.$,^ddalphaPsi_D.D.$");
   update_partial_derivatives(ns,"NS","^dphi_D.$,^ddphi_D.D.$");
   
   /* update AConf^{ij} */
-  physics(bhns,ADM_UPDATE_AConfIJ);
+  physics(nsns,ADM_UPDATE_AConfIJ);
   
   /* update normal on AH */
   physics(bh,BH_UPDATE_sConf);
@@ -231,12 +231,12 @@ static Physics_T *guess_new_physics(void)
   free_grid_char(grid_char);
   
   FUNC_TOC
-  return bhns;
+  return nsns;
 }
 
 /* based on grid character, make a new grid for the system. */
 static void 
-  create_new_grid(Grid_Char_T *const grid_char,Physics_T *const bhns)
+  create_new_grid(Grid_Char_T *const grid_char,Physics_T *const nsns)
 {
   FUNC_TIC
   
@@ -352,7 +352,7 @@ static void
   make_patches(grid);
   realize_interfaces(grid);
   
-  bhns->grid = grid;
+  nsns->grid = grid;
   
   FUNC_TOC
 }
@@ -439,76 +439,76 @@ static void initial_B0I(Physics_T *const phys,
 }
 
 /* loading from checkpoint */
-Physics_T *bhns_read_physics_from_checkpoint(void)
+Physics_T *nsns_read_physics_from_checkpoint(void)
 {
   FUNC_TIC
-  Physics_T *const bhns = init_physics(0,BHNS);
+  Physics_T *const nsns = init_physics(0,BHNS);
   FILE *file = 0;
   
   /* first load grid and parameters */
-  file = open_checkpoint_file_then_read_grid_and_params(bhns);
+  file = open_checkpoint_file_then_read_grid_and_params(nsns);
   
   /* it already hit the stop */
   if (Pgeti(P_"STOP") == 1)
   {
     printf(Pretty0" All iterations have already done.\n");
-    free_physics(bhns);
+    free_physics(nsns);
     Fclose(file);
     
     FUNC_TOC
     return 0;
   }
   
-  Physics_T *const ns = init_physics(bhns,NS);
-  Physics_T *const bh = init_physics(bhns,BH);
+  Physics_T *const ns = init_physics(nsns,NS);
+  Physics_T *const bh = init_physics(nsns,BH);
   
   /* make the patches */
-  make_patches(bhns->grid);
+  make_patches(nsns->grid);
   
   /* realizing the geometry */
-  realize_interfaces(bhns->grid);
+  realize_interfaces(nsns->grid);
   
   /* set parameters, it's important to add paramters 
   // since these call also reposible to set default functions. */
-  physics(bhns,FREE_DATA_SET_PARAMS);
-  physics(bhns,ADM_SET_PARAMS);
-  physics(bhns,SYS_SET_PARAMS);
-  physics(bhns,STRESS_ENERGY_SET_PARAMS);
-  physics(bhns,OBSERVE_SET_PARAMS);  
-  physics(bhns,BH_SET_PARAMS);
-  physics(bhns,STAR_SET_PARAMS);
+  physics(nsns,FREE_DATA_SET_PARAMS);
+  physics(nsns,ADM_SET_PARAMS);
+  physics(nsns,SYS_SET_PARAMS);
+  physics(nsns,STRESS_ENERGY_SET_PARAMS);
+  physics(nsns,OBSERVE_SET_PARAMS);  
+  physics(nsns,BH_SET_PARAMS);
+  physics(nsns,STAR_SET_PARAMS);
   
   /* now add fields */
-  physics(bhns,ADM_ADD_FIELDS);
-  physics(bhns,FREE_DATA_ADD_FIELDS);
-  physics(bhns,STRESS_ENERGY_ADD_FIELDS);
-  physics(bhns,SYS_ADD_FIELDS);
-  physics(bhns,OBSERVE_ADD_FIELDS);
-  physics(bhns,BH_ADD_FIELDS);
-  physics(bhns,STAR_ADD_FIELDS);
+  physics(nsns,ADM_ADD_FIELDS);
+  physics(nsns,FREE_DATA_ADD_FIELDS);
+  physics(nsns,STRESS_ENERGY_ADD_FIELDS);
+  physics(nsns,SYS_ADD_FIELDS);
+  physics(nsns,OBSERVE_ADD_FIELDS);
+  physics(nsns,BH_ADD_FIELDS);
+  physics(nsns,STAR_ADD_FIELDS);
   
   /* populate free data fields */
-  physics(bhns,FREE_DATA_POPULATE);
+  physics(nsns,FREE_DATA_POPULATE);
   
   /* then read saved fields in param "checkpoint_save" */
-  read_fields_from_checkpoint_file(bhns,file);
+  read_fields_from_checkpoint_file(nsns,file);
   Fclose(file);
   
   /* alse we need NS spin vector */
   star_W_spin_vector_idealfluid_update(ns,"NS");
   
   /* beta = B0+B1 */
-  physics(bhns,ADM_UPDATE_B1I);
-  update_partial_derivatives(bhns,".*","^dB0_U.+,^ddB0_U.+");
-  physics(bhns,ADM_UPDATE_beta);
+  physics(nsns,ADM_UPDATE_B1I);
+  update_partial_derivatives(nsns,".*","^dB0_U.+,^ddB0_U.+");
+  physics(nsns,ADM_UPDATE_beta);
   
   /* update derivatives */
-  update_partial_derivatives(bhns,".*","^dpsi_D.$,^ddpsi_D.D.$,"
+  update_partial_derivatives(nsns,".*","^dpsi_D.$,^ddpsi_D.D.$,"
                                       "^dalphaPsi_D.$,^ddalphaPsi_D.D.$");
   update_partial_derivatives(ns,"NS","^dphi_D.$,^ddphi_D.D.$");
   
   /* update AConf^{ij} */
-  physics(bhns,ADM_UPDATE_AConfIJ);
+  physics(nsns,ADM_UPDATE_AConfIJ);
   
   /* update normal on AH */
   physics(bh,BH_UPDATE_sConf);
@@ -521,7 +521,7 @@ Physics_T *bhns_read_physics_from_checkpoint(void)
   free_physics(bh);
 
   FUNC_TOC
-  return bhns;
+  return nsns;
 }
 
 /* using copy or interpolation from old physics to 
