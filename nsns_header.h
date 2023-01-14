@@ -14,7 +14,6 @@
 #include "physics_stress_energy_lib.h"
 #include "physics_transformation_lib.h"
 #include "physics_observe_lib.h"
-#include "physics_blackhole_lib.h"
 #include "physics_system_lib.h"
 #include "physics_star_lib.h"
 
@@ -25,7 +24,7 @@
 // that some parameters when are read in various parts of physics 
 // libraries assume this consistency otherwise it might get 
 // error of undefined parameter. */
-#define P_ "BHNS_"
+#define P_ "NSNS_"
 
 Physics_T *nsns_initialize_new_physics(Physics_T *const phys);
 void nsns_add_fields(Physics_T *const phys,const char *const region);

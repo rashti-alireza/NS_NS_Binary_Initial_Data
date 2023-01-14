@@ -1,12 +1,12 @@
 /*
 // Alireza Rashti
-// January 2021
+// January 2023
 */
 
 #include "nsns_main.h"
 
 
-/* initial data for BH-NS binary system */
+/* initial data for NS-NS binary system */
 int NS_NS_Binary_Initial_Data(void *vp)
 {
   /* if this is a BAM call */
@@ -48,8 +48,6 @@ static void construct_initial_data(void *vp)
     nsns_analyze(new_phys,Pgeti(P_"resolution_iteration"));
     
     free_physics(old_phys);
-    
-    fill_blackhole(new_phys);
     
     old_phys = new_phys;
     
@@ -102,16 +100,16 @@ static void set_default_parameters(void)
   Pset_default("solve_ddm_schur_thread_cap","1");
   
   
-  /* BH-NS parameters:
+  /* NS-NS parameters:
   // ================== */
  
-  /* how far are BH-NS */
+  /* how far are NS-NS */
   Pset_default(P_"separation","50.");
   
-  /* how fast BH-NS angular velocity */
+  /* how fast NS-NS angular velocity */
   Pset_default(P_"angular_velocity","0.");
   
-  /* how fast BH-NS infall velocity */
+  /* how fast NS-NS infall velocity */
   Pset_default(P_"infall_velocity","0.");
  
   /* how to start off:
@@ -132,7 +130,7 @@ static void set_default_parameters(void)
   Pset_default(P_"y_CM","0."); 
   Pset_default(P_"z_CM","0."); 
   
-  /* boost velocity for BHNS */
+  /* boost velocity for NS-NS */
   Pset_default(P_"boost_Vx","0."); 
   Pset_default(P_"boost_Vy","0."); 
   Pset_default(P_"boost_Vz","0."); 
@@ -141,8 +139,8 @@ static void set_default_parameters(void)
   Pset_default(P_"ADM_mass","1.");
   Pset_default(P_"Komar_mass","1.");
   
-  /* what to print for properties of BHNS, add and separate with comma */
-  Pset_default(P_"BHNS_properties",
+  /* what to print for properties of NSNS, add and separate with comma */
+  Pset_default(P_"NSNS_properties",
     "separation,x_CM,y_CM,z_CM,ADM_mass,Komar_mass,mass_ratio,"
     "angular_velocity,infall_velocity,"
     "Px_ADM,Py_ADM,Pz_ADM,"
@@ -174,71 +172,73 @@ static void set_default_parameters(void)
   // dF/du preparation is requried. */
   Pset_default(P_"dF/du_prepare","none");
   
-  /* NS paramters:
+  /* NS1 paramters:
   // ============= */
   
   /* NS masses */
-  Pset_default("NS_baryonic_mass_current","1.");
-  Pset_default("NS_baryonic_mass","1.");
-  Pset_default("NS_ADM_mass","1.");
-  Pset_default("NS_Komar_mass","1.");
-  Pset_default("NS_TOV_ADM_mass","1.");
-  Pset_default("NS_TOV_radius","1.");
-  Pset_default("NS_TOV_compactness","0.");
-  Pset_default("NS_mass_shedding_indicator","1.");
+  Pset_default("NS1_baryonic_mass_current","1.");
+  Pset_default("NS1_baryonic_mass","1.");
+  Pset_default("NS1_ADM_mass","1.");
+  Pset_default("NS1_Komar_mass","1.");
+  Pset_default("NS1_TOV_ADM_mass","1.");
+  Pset_default("NS1_TOV_radius","1.");
+  Pset_default("NS1_TOV_compactness","0.");
+  Pset_default("NS1_mass_shedding_indicator","1.");
   
   /* NS EoS: */
-  Pset_default("NS_EoS_description","NA");
+  Pset_default("NS1_EoS_description","NA");
+  
   /* [polytropic,piecewise_polytropic] */
-  Pset_default("NS_EoS_type","NA");
+  Pset_default("NS1_EoS_type","NA");
+  
   /* unit: [geo] */
-  Pset_default("NS_EoS_unit","NA");
-  Pset_default("NS_EoS_K0","NA");
-  Pset_default("NS_EoS_Gamma","NA");
-  Pset_default("NS_EoS_rho0_th","NA");
+  Pset_default("NS1_EoS_unit","NA");
+  Pset_default("NS1_EoS_K0","NA");
+  Pset_default("NS1_EoS_Gamma","NA");
+  Pset_default("NS1_EoS_rho0_th","NA");
   
   /* -> central matters */
-  Pset_default("NS_rho0_center","1E-3");
-  Pset_default("NS_pressure_center","1E-3");
-  Pset_default("NS_energy_density_center","1E-3");
+  Pset_default("NS1_rho0_center","1E-3");
+  Pset_default("NS1_pressure_center","1E-3");
+  Pset_default("NS1_energy_density_center","1E-3");
   
   /* geometrical center of NS.
   // NOTE: geometrical center can be different from patch->c. */ 
-  Pset_default("NS_center_x","0."); 
-  Pset_default("NS_center_y","0."); 
-  Pset_default("NS_center_z","0."); 
-  Pset_default("NS_x_CM","0."); 
-  Pset_default("NS_y_CM","0."); 
-  Pset_default("NS_z_CM","0."); 
-  
+  Pset_default("NS1_center_x","0."); 
+  Pset_default("NS1_center_y","0."); 
+  Pset_default("NS1_center_z","0."); 
+  Pset_default("NS1_x_CM","0."); 
+  Pset_default("NS1_y_CM","0."); 
+  Pset_default("NS1_z_CM","0."); 
+
   /* box length at the center of NS */
-  Pset_default("grid_NS_central_box_length","auto");
+  Pset_default("grid_NS1_central_box_length","auto");
   
   /* spin vector to adjust spin for NS */
-  Pset_default("NS_Omega_x","0."); 
-  Pset_default("NS_Omega_y","0."); 
-  Pset_default("NS_Omega_z","0."); 
-  
+  Pset_default("NS1_Omega_x","0."); 
+  Pset_default("NS1_Omega_y","0."); 
+  Pset_default("NS1_Omega_z","0."); 
+
   /* spin */
-  Pset_default("NS_chi_x","0."); 
-  Pset_default("NS_chi_y","0."); 
-  Pset_default("NS_chi_z","0."); 
-  Pset_default("NS_spin_x","0."); 
-  Pset_default("NS_spin_y","0."); 
-  Pset_default("NS_spin_z","0."); 
-  
+  Pset_default("NS1_chi_x","0."); 
+  Pset_default("NS1_chi_y","0."); 
+  Pset_default("NS1_chi_z","0."); 
+  Pset_default("NS1_spin_x","0."); 
+  Pset_default("NS1_spin_y","0."); 
+  Pset_default("NS1_spin_z","0."); 
+
   /* ADM momentum */
-  Pset_default("NS_Px_ADM","0."); 
-  Pset_default("NS_Py_ADM","0."); 
-  Pset_default("NS_Pz_ADM","0."); 
+  Pset_default("NS1_Px_ADM","0."); 
+  Pset_default("NS1_Py_ADM","0."); 
+  Pset_default("NS1_Pz_ADM","0."); 
   
   /* ADM angular momentum */
-  Pset_default("NS_Jx_ADM","0."); 
-  Pset_default("NS_Jy_ADM","0."); 
-  Pset_default("NS_Jz_ADM","0."); 
-  
+  Pset_default("NS1_Jx_ADM","0."); 
+  Pset_default("NS1_Jy_ADM","0."); 
+  Pset_default("NS1_Jz_ADM","0."); 
+
   /* what to print for properties of NS, add and separate with comma */
-  Pset_default(P_"NS_properties",
+  Pset_default(P_"NS1_properties",
    "center_x,center_y,center_z,x_CM,y_CM,z_CM,"
    "max_radius,min_radius,TOV_radius,"
    "ADM_mass,TOV_ADM_mass,Komar_mass,baryonic_mass_current,"
@@ -254,365 +254,263 @@ static void set_default_parameters(void)
   // options:
   // ========
   // o. TOV (see NS physics) */
-  Pset_default("NS_start_off","TOV"); 
+  Pset_default("NS1_start_off","TOV"); 
   
   /* max l in Ylm expansion */
-  Pset_default("NS_surface_Ylm_max_l","1"); 
+  Pset_default("NS1_surface_Ylm_max_l","1"); 
   
   /* NS surface */
-  Pset_default("NS_surface_type","perfect_s2"); 
-  Pset_default("NS_did_NS_surface_change?","1");
+  Pset_default("NS1_surface_type","perfect_s2"); 
+  Pset_default("NS1_did_NS_surface_change?","1");
+  
   /* if new surface relative change exceeds this, NS surface gets updated */
-  Pset_default("NS_surface_change_threshold","0.0");
+  Pset_default("NS1_surface_change_threshold","0.0");
+  
   /* max allowed surface fails */
-  Pset_default("NS_surface_max_fail","100");
+  Pset_default("NS1_surface_max_fail","100");
+  
   /* number of surface fails */
-  Pset_default("NS_surface_num_fail","0");
+  Pset_default("NS1_surface_num_fail","0");
   
   /* observe method pertinet to NS */
-  Pset_default("NS_Observe_ADM_M","V_obj,default");
-  Pset_default("NS_Observe_Komar_M","S_obj,default");
-  Pset_default("NS_Observe_baryonic_M","V_obj,default");
-  Pset_default("NS_Observe_ADM_P","S_obj,default");
-  Pset_default("NS_Observe_ADM_J","S_obj,default");
-  Pset_default("NS_Observe_CM","V_obj,default");
-  Pset_default("NS_Observe_spin","S_obj,JRP");
+  Pset_default("NS1_Observe_ADM_M","V_obj,default");
+  Pset_default("NS1_Observe_Komar_M","S_obj,default");
+  Pset_default("NS1_Observe_baryonic_M","V_obj,default");
+  Pset_default("NS1_Observe_ADM_P","S_obj,default");
+  Pset_default("NS1_Observe_ADM_J","S_obj,default");
+  Pset_default("NS1_Observe_CM","V_obj,default");
+  Pset_default("NS1_Observe_spin","S_obj,JRP");
   
   /* smooth and polish phi equation close to the surface */
-  Pset_default("NS_Eq_phi_polish","0.1");
+  Pset_default("NS1_Eq_phi_polish","0.1");
   
   /* tune and adjust: */
   /* for option cf star_main */
-  Pset_default("NS_force_balance_equation","adjust(d/dy:Omega)");
-  Pset_default("NS_force_balance_update_weight","0.");
-  Pset_default("NS_adjust_center_method","Taylor_expansion");
-  Pset_default("NS_adjust_center_update_weight","0.");
-  Pset_default("NS_enthalpy_allowed_residual","1E-8");
-  Pset_default("NS_enthalpy_L2_residual","0.");
+  Pset_default("NS1_force_balance_equation","adjust(d/dy:Omega)");
+  Pset_default("NS1_force_balance_update_weight","0.");
+  Pset_default("NS1_adjust_center_method","Taylor_expansion");
+  Pset_default("NS1_adjust_center_update_weight","0.");
+  Pset_default("NS1_enthalpy_allowed_residual","1E-8");
+  Pset_default("NS1_enthalpy_L2_residual","0.");
   
   /* extrapolation of matter fields outside NS:
   // options = [inverse_r2,exp2,poly2,inverse_r2_expmr,
                 inverse_r2_expmAr,enthalpy_expmr_phi_inverse_r2]. */
-  Pset_default("NS_extrapolate_matter_fields","inverse_r2_expmAr");
+  Pset_default("NS1_extrapolate_matter_fields","inverse_r2_expmAr");
   
   /* Euler eq. constant */
-  Pset_default("NS_Euler_equation_constant","-0.8");
-  Pset_default("NS_Euler_const_update_weight","1.");
+  Pset_default("NS1_Euler_equation_constant","-0.8");
+  Pset_default("NS1_Euler_const_update_weight","1.");
   
   /* NS enhtalpy update weight */
-  Pset_default("NS_enthalpy_update_weight","0.");
+  Pset_default("NS1_enthalpy_update_weight","0.");
+  
   /* set enthalpy != 1 on surface to 1
   // options: [yes/no]. */
-  Pset_default("NS_enthalpy_neat","yes");
+  Pset_default("NS1_enthalpy_neat","yes");
   
   /* root finder pertinent to NS */
-  Pset_default("NS_RootFinder_method","Steepest_Descent");
-  Pset_default("NS_RootFinder_Tolerance","1E-9");
-  Pset_default("NS_RootFinder_Iteration","1000");
-  Pset_default("NS_RootFinder_verbose","no");
+  Pset_default("NS1_RootFinder_method","Steepest_Descent");
+  Pset_default("NS1_RootFinder_Tolerance","1E-9");
+  Pset_default("NS1_RootFinder_Iteration","1000");
+  Pset_default("NS1_RootFinder_verbose","no");
   
-  /* BH paramters:
+  /* NS2 paramters:
   // ============= */
   
-  /* BH irreducible mass */
-  Pset_default("BH_irreducible_mass","1.");
+  /* NS masses */
+  Pset_default("NS2_baryonic_mass_current","1.");
+  Pset_default("NS2_baryonic_mass","1.");
+  Pset_default("NS2_ADM_mass","1.");
+  Pset_default("NS2_Komar_mass","1.");
+  Pset_default("NS2_TOV_ADM_mass","1.");
+  Pset_default("NS2_TOV_radius","1.");
+  Pset_default("NS2_TOV_compactness","0.");
+  Pset_default("NS2_mass_shedding_indicator","1.");
   
-  /* geometrical center of BH.
+  /* NS EoS: */
+  Pset_default("NS2_EoS_description","NA");
+  
+  /* [polytropic,piecewise_polytropic] */
+  Pset_default("NS2_EoS_type","NA");
+  
+  /* unit: [geo] */
+  Pset_default("NS2_EoS_unit","NA");
+  Pset_default("NS2_EoS_K0","NA");
+  Pset_default("NS2_EoS_Gamma","NA");
+  Pset_default("NS2_EoS_rho0_th","NA");
+  
+  /* -> central matters */
+  Pset_default("NS2_rho0_center","1E-3");
+  Pset_default("NS2_pressure_center","1E-3");
+  Pset_default("NS2_energy_density_center","1E-3");
+  
+  /* geometrical center of NS.
   // NOTE: geometrical center can be different from patch->c. */ 
-  Pset_default("BH_center_x","0."); 
-  Pset_default("BH_center_y","0."); 
-  Pset_default("BH_center_z","0."); 
+  Pset_default("NS2_center_x","0."); 
+  Pset_default("NS2_center_y","0."); 
+  Pset_default("NS2_center_z","0."); 
+  Pset_default("NS2_x_CM","0."); 
+  Pset_default("NS2_y_CM","0."); 
+  Pset_default("NS2_z_CM","0."); 
   
-  Pset_default("BH_x_CM","0."); 
-  Pset_default("BH_y_CM","0."); 
-  Pset_default("BH_z_CM","0."); 
+  /* box length at the center of NS */
+  Pset_default("grid_NS2_central_box_length","auto");
   
-  /* box length at the center of BH */
-  Pset_default("grid_BH_central_box_length","auto");
-  
-  /* boost velocity for BH, 
-  // if no boost required like in conformal flat metric, 
-  // set them to value "off". */
-  Pset_default("BH_boost_Vx","0."); 
-  Pset_default("BH_boost_Vy","0."); 
-  Pset_default("BH_boost_Vz","0."); 
-  
-  /* spin vector to adjust spin for BH */
-  Pset_default("BH_Omega_x","0."); 
-  Pset_default("BH_Omega_y","0."); 
-  Pset_default("BH_Omega_z","0."); 
-  
-  /* tune spin */
-  Pset_default("BH_spin_update_weight","0."); 
-  Pset_default("BH_spin_tolerance","1E-3"); 
+  /* spin vector to adjust spin for NS */
+  Pset_default("NS2_Omega_x","0."); 
+  Pset_default("NS2_Omega_y","0."); 
+  Pset_default("NS2_Omega_z","0."); 
   
   /* spin */
-  Pset_default("BH_chi_x","0."); 
-  Pset_default("BH_chi_y","0."); 
-  Pset_default("BH_chi_z","0."); 
-  Pset_default("BH_spin_x","0."); 
-  Pset_default("BH_spin_y","0."); 
-  Pset_default("BH_spin_z","0."); 
+  Pset_default("NS2_chi_x","0."); 
+  Pset_default("NS2_chi_y","0."); 
+  Pset_default("NS2_chi_z","0."); 
+  Pset_default("NS2_spin_x","0."); 
+  Pset_default("NS2_spin_y","0."); 
+  Pset_default("NS2_spin_z","0."); 
   
   /* ADM momentum */
-  Pset_default("BH_Px_ADM","0."); 
-  Pset_default("BH_Py_ADM","0."); 
-  Pset_default("BH_Pz_ADM","0."); 
+  Pset_default("NS2_Px_ADM","0."); 
+  Pset_default("NS2_Py_ADM","0."); 
+  Pset_default("NS2_Pz_ADM","0."); 
   
   /* ADM angular momentum */
-  Pset_default("BH_Jx_ADM","0."); 
-  Pset_default("BH_Jy_ADM","0."); 
-  Pset_default("BH_Jz_ADM","0."); 
+  Pset_default("NS2_Jx_ADM","0."); 
+  Pset_default("NS2_Jy_ADM","0."); 
+  Pset_default("NS2_Jz_ADM","0."); 
   
-  /* what to print for properties of BH, add and separate with comma */
-  Pset_default(P_"BH_properties",
-   "center_x,center_y,center_z,x_CM,y_CM,z_CM,max_radius,min_radius,"
-   "Komar_mass,irreducible_mass,irreducible_mass_current,"
-   "Christodoulou_mass,Christodoulou_mass_current,"
+  /* what to print for properties of NS, add and separate with comma */
+  Pset_default(P_"NS2_properties",
+   "center_x,center_y,center_z,x_CM,y_CM,z_CM,"
+   "max_radius,min_radius,TOV_radius,"
+   "ADM_mass,TOV_ADM_mass,Komar_mass,baryonic_mass_current,"
+   "baryonic_mass,mass_shedding_indicator,TOV_compactness,"
+   "rho0_center,pressure_center,energy_density_center,"
+   "enthalpy_L2_residual,Euler_equation_constant,"
    "Omega_x,Omega_y,Omega_z,chi_x,chi_y,chi_z,"
-   "chi_x_current,chi_y_current,chi_z_current,"
    "spin_x,spin_y,spin_z,"
    "Px_ADM,Py_ADM,Pz_ADM,"
-   "Jx_ADM,Jy_ADM,Jz_ADM,"
-   "boost_Vx,boost_Vy,boost_Vz");
- 
-  /* the very first BH approximation
+   "Jx_ADM,Jy_ADM,Jz_ADM");
+  
+  /* the very first NS approximation
   // options:
   // ========
-  // o. CloseKerrSchild (see BH physics)
-  // o. IsoSchild (see BH physics) */
-  Pset_default("BH_start_off","CloseKerrSchild"); 
-  
-  /* roll off function to stich free data.
-  // options:
-  // ========
-  // o. exp(-lambda*(r/rmax)^p):r<rmax.
-  // o. exp(-lambda*(r/rmax)^p). */
-  Pset_default("BH_RollOff_function","exp(-lambda*(r/rmax)^p)");
-  
-  /* lambda in "BH_RollOff_function".
-  // options:
-  // ========
-  // o. constant_1.
-  // o. |(r-rmin)/(rmax-r)|. */  
-  Pset_default("BH_RollOff_lambda","constant_1");
-  
-  /* rmax in "BH_RollOff_function" */
-  Pset_default("BH_RollOff_rmax","auto");
-  
-  /* p in "BH_RollOff_function" */
-  Pset_default("BH_RollOff_power","4.");
+  // o. TOV (see NS physics) */
+  Pset_default("NS2_start_off","TOV"); 
   
   /* max l in Ylm expansion */
-  Pset_default("BH_surface_Ylm_max_l","1"); 
+  Pset_default("NS2_surface_Ylm_max_l","1"); 
   
-  /* BH surface type */
-  Pset_default("BH_surface_type","perfect_s2"); 
+  /* NS surface */
+  Pset_default("NS2_surface_type","perfect_s2"); 
+  Pset_default("NS2_did_NS_surface_change?","1");
   
-  /* did_BH_surface_change? used for interpolation purposes and efficiency */
-  Pset_default("BH_did_BH_surface_change?","1");
+  /* if new surface relative change exceeds this, NS surface gets updated */
+  Pset_default("NS2_surface_change_threshold","0.0");
   
-  /* was BH filled? used to tack whether BH is filled or not */
-  Pset_default("BH_was_BH_filled?","0");
+  /* max allowed surface fails */
+  Pset_default("NS2_surface_max_fail","100");
   
-  /* equation related: */
-  /* XCTS means: alpha,beta,psi */
-  Pset_default("BH_Eq_inner_BC_fields","XCTS");
+  /* number of surface fails */
+  Pset_default("NS2_surface_num_fail","0");
   
-  /* set alpha on AH to be W*KerrSchild value. */
-  Pset_default("BH_Eq_inner_BC_alpha","w*KerrSchild");
+  /* observe method pertinet to NS */
+  Pset_default("NS2_Observe_ADM_M","V_obj,default");
+  Pset_default("NS2_Observe_Komar_M","S_obj,default");
+  Pset_default("NS2_Observe_baryonic_M","V_obj,default");
+  Pset_default("NS2_Observe_ADM_P","S_obj,default");
+  Pset_default("NS2_Observe_ADM_J","S_obj,default");
+  Pset_default("NS2_Observe_CM","V_obj,default");
+  Pset_default("NS2_Observe_spin","S_obj,JRP");
   
-  /* set bete^i on AH to be alpha*s^i + Omega x r.  */
-  Pset_default("BH_Eq_inner_BC_beta","alpha+Omega*r");
+  /* smooth and polish phi equation close to the surface */
+  Pset_default("NS2_Eq_phi_polish","0.1");
   
-  /* observe method pertinet to BH */
-  Pset_default("BH_Observe_ADM_M","S_obj,default");
-  Pset_default("BH_Observe_Komar_M","S_obj,default");
-  Pset_default("BH_Observe_Irreducible_M","S_obj,default");
-  Pset_default("BH_Observe_ADM_P","S_obj,default");
-  Pset_default("BH_Observe_ADM_J","S_obj,default");
-  Pset_default("BH_Observe_CM","S_obj,default");
-  Pset_default("BH_Observe_spin","S_obj,Campanelli");
+  /* tune and adjust: */
+  /* for option cf star_main */
+  Pset_default("NS2_force_balance_equation","adjust(d/dy:Omega)");
+  Pset_default("NS2_force_balance_update_weight","0.");
+  Pset_default("NS2_adjust_center_method","Taylor_expansion");
+  Pset_default("NS2_adjust_center_update_weight","0.");
+  Pset_default("NS2_enthalpy_allowed_residual","1E-8");
+  Pset_default("NS2_enthalpy_L2_residual","0.");
   
-  /* how to tune BH Radius */
-  Pset_default("BH_tune_BH_radius_criteria","fix_irreducible_mass");
-  Pset_default("BH_mass_tolerance","1E-5");
-  Pset_default("BH_radius_update_weight","0.");
+  /* extrapolation of matter fields outside NS:
+  // options = [inverse_r2,exp2,poly2,inverse_r2_expmr,
+                inverse_r2_expmAr,enthalpy_expmr_phi_inverse_r2]. */
+  Pset_default("NS2_extrapolate_matter_fields","inverse_r2_expmAr");
   
-  /* BH filler parameters:
-  // { */
-  /* how to fill: 
-  // options:
-  // ChebTn_Ylm_perfect_s2:
-  //    fill PERFECT S2 surface excised BH with data 
-  //    demanding C2 continuity across horizon. extrapolant is:
-  //    f(r,th,ph) = C_{ilm}*ChebyshevT(i,r)*Ylm(th,ph). 
-  //    thie method is faster than ChebTn_general_s2
-  // ChebTn_general_s2: 
-  //    fill a GENERAL S2 surface excised BH with data 
-  //    demanding C2 continuity across horizon. extrapolant is:
-  //    f(r) = C_{i}ChebyshevT(i,r) along radius. 
-  // None:
-  //    No filling. 
-  // expmr_C0_perfect_s2:
-  //    using f(r) = f(r0)e^-r (this is preferred during solve).
-  // r_expmr_C1_perfect_s2: 
-  //    using f(r) = (a+b*r)e^-r.
-  */
-  Pset_default("BH_filler_method","expmr_C0_perfect_s2");
-  /* max l for Y_{lm} expansion in ChebTn_Ylm_perfect_s2 */
-  Pset_default("BH_filler_Ylm_expansion_lmax","15");
-  /* it won't fill inside the BH if r < Rmin_cutoff.
-  // note: this only kicks in for ChebTn_general_s2 method.
-  // the ChebTn_Ylm_perfect_s2 is so fast which we don't bother. */
-  Pset_default("BH_filler_Rmin_cutoff","-1.");
-  /* which fields to be filled */
-  Pset_default("BH_filler_fields","alphaPsi,psi,beta_U0,beta_U1,beta_U2,"
-                                  "adm_Kij_D0D0,adm_Kij_D0D1,adm_Kij_D0D2,"
-                                  "adm_Kij_D1D1,adm_Kij_D1D2,adm_Kij_D2D2,"
-                                  "gConf_D0D0,gConf_D0D1,gConf_D0D2,"
-                                  "gConf_D1D1,gConf_D1D2,gConf_D2D2");
-  /* value of extrapolated fields at the center of BH r = 0 */
-  Pset_default("BH_filler_r0_trK","0.");
-  Pset_default("BH_filler_r0_alpha","0.2");
-  Pset_default("BH_filler_r0_psi","2.");
-  Pset_default("BH_filler_r0_alphaPsi","0.4");
-  Pset_default("BH_filler_r0_beta_U0","0.");
-  Pset_default("BH_filler_r0_beta_U1","0.");
-  Pset_default("BH_filler_r0_beta_U2","0.");
-  Pset_default("BH_filler_r0_B0_U0","0.");
-  Pset_default("BH_filler_r0_B0_U1","0.");
-  Pset_default("BH_filler_r0_B0_U2","0.");
-  Pset_default("BH_filler_r0_gConf_D0D0","4.");
-  Pset_default("BH_filler_r0_gConf_D0D1","0.");
-  Pset_default("BH_filler_r0_gConf_D0D2","0.");
-  Pset_default("BH_filler_r0_gConf_D1D1","4.");
-  Pset_default("BH_filler_r0_gConf_D1D2","0.");
-  Pset_default("BH_filler_r0_gConf_D2D2","4.");
-  Pset_default("BH_filler_r0_adm_Kij_D0D0","0.");
-  Pset_default("BH_filler_r0_adm_Kij_D0D1","0.");
-  Pset_default("BH_filler_r0_adm_Kij_D0D2","0.");
-  Pset_default("BH_filler_r0_adm_Kij_D1D1","0.");
-  Pset_default("BH_filler_r0_adm_Kij_D1D2","0.");
-  Pset_default("BH_filler_r0_adm_Kij_D2D2","0.");
-  /* verbos? [1 = yes; 0 = no] */
-  Pset_default("BH_filler_verbose","0");
+  /* Euler eq. constant */
+  Pset_default("NS2_Euler_equation_constant","-0.8");
+  Pset_default("NS2_Euler_const_update_weight","1.");
   
-  /* test BH filler: interpolate along this line:
-  // x = init_x + t*slop_x
-  // y = init_y + t*slop_y
-  // z = init_z + t*slop_z. */
-  Pset_default("BH_filler_test_print_1d","no");
-  Pset_default("BH_filler_test_print_1d_slop_x","0.");
-  Pset_default("BH_filler_test_print_1d_slop_y","0.");
-  Pset_default("BH_filler_test_print_1d_slop_z","0.");
-  Pset_default("BH_filler_test_print_1d_init_x","0.");
-  Pset_default("BH_filler_test_print_1d_init_y","0.");
-  Pset_default("BH_filler_test_print_1d_init_z","0.");
-  Pset_default("BH_filler_test_print_1d_length","20.");
-  Pset_default("BH_filler_test_print_1d_points","1");
-  /* } */
+  /* NS enhtalpy update weight */
+  Pset_default("NS2_enthalpy_update_weight","0.");
   
-  /* modify parameters if needed */
+  /* set enthalpy != 1 on surface to 1
+  // options: [yes/no]. */
+  Pset_default("NS2_enthalpy_neat","yes");
   
-  /* auto roll off param. 
-  // note: too small roll off might not get you a converge solution
-  // the bigger the better however, the metric should become flat at star
-  // and around it, so not too big! */
-  if (Pcmps("BH_RollOff_rmax","auto"))
-  {
-    double rmax = Pgetd(P_"separation")/2.;
-    assert(rmax > 0);
-    Psetd("BH_RollOff_rmax",rmax);
-  }
+  /* root finder pertinent to NS */
+  Pset_default("NS2_RootFinder_method","Steepest_Descent");
+  Pset_default("NS2_RootFinder_Tolerance","1E-9");
+  Pset_default("NS2_RootFinder_Iteration","1000");
+  Pset_default("NS2_RootFinder_verbose","no");
   
   /* use Kepler's law to set angular velocity */
   if (Pcmps(P_"angular_velocity","auto"))
   {
-    const double m1 = Pgetd("BH_irreducible_mass");
-    const double m2 = Pgetd("NS_baryonic_mass");
+    const double m1 = Pgetd("NS1_baryonic_mass");
+    const double m2 = Pgetd("NS2_baryonic_mass");
+    
     const double r  = Pgetd(P_"separation");
     const double O  = sqrt((m1+m2)/pow(r,3.));
     
     Psetd(P_"angular_velocity",O);
   }
   
-  /* set BH center and NS center */
-  if (strstr(Pgets("grid_set_BH"),"right"))
+  /* set NS1 and NS2 centers */
+  if (strstr(Pgets("grid_set_NS1"),"right"))
   {
     const double S = Pgetd(P_"separation");
     
-    /* BH center in +y */
-    Psetd("BH_center_x",0.);
-    Psetd("BH_center_y",S/2.);
-    Psetd("BH_center_z",0.);
+    /* NS1 center in +y */
+    Psetd("NS1_center_x",0.);
+    Psetd("NS1_center_y",S/2.);
+    Psetd("NS1_center_z",0.);
     
-    /* NS center in -y */
-    Psetd("NS_center_x",0.);
-    Psetd("NS_center_y",-S/2.);
-    Psetd("NS_center_z",0.);
+    /* NS2 center in -y */
+    Psetd("NS2_center_x",0.);
+    Psetd("NS2_center_y",-S/2.);
+    Psetd("NS2_center_z",0.);
   }
   else
   {
     const double S = Pgetd(P_"separation");
+
+    /* NS1 center in -y */
+    Psetd("NS1_center_x",0.);
+    Psetd("NS1_center_y",-S/2.);
+    Psetd("NS1_center_z",0.);
     
-    /* BH center in -y */
-    Psetd("BH_center_x",0.);
-    Psetd("BH_center_y",-S/2.);
-    Psetd("BH_center_z",0.);
+    /* NS2 center in +y */
+    Psetd("NS2_center_x",0.);
+    Psetd("NS2_center_y",S/2.);
+    Psetd("NS2_center_z",0.);
     
-    /* NS center in +y */
-    Psetd("NS_center_x",0.);
-    Psetd("NS_center_y",S/2.);
-    Psetd("NS_center_z",0.);
   }
   
   /* set center of mass */
   {
-    const double irr_mass = Pgetd("BH_irreducible_mass");
-    const double bar_mass = Pgetd("NS_baryonic_mass");
-    const double y_CM = (bar_mass*Pgetd("NS_center_y") +
-                       irr_mass*Pgetd("BH_center_y"))/(bar_mass+irr_mass);
+    const double bar_mass1 = Pgetd("NS1_baryonic_mass");
+    const double bar_mass2 = Pgetd("NS2_baryonic_mass");
+    const double y_CM = (bar_mass1*Pgetd("NS1_center_y") +
+                         bar_mass2*Pgetd("NS2_center_y"))/(bar_mass1+bar_mass2);
    
     Psetd(P_"x_CM",0.);
     Psetd(P_"y_CM",y_CM);
     Psetd(P_"z_CM",0.);
   }
   
-  /* boost speed for BH in x direction */
-  if (!Pcmps("BH_boost_Vx","off"))
-  {
-    const double Omega = Pgetd(P_"angular_velocity");
-    const double y_CM  = Pgetd(P_"y_CM");
-    const double BH_center_y = Pgetd("BH_center_y");
-    
-    Psetd("BH_boost_Vx",-Omega*(BH_center_y-y_CM));
-  }
-}
-
-/* if nessesary fill the ns1 for interpolation purposes */
-static void fill_blackhole(Physics_T *const phys)
-{
-  if (!phys) return;
- 
-  FUNC_TIC
-  
-  Physics_T *const ns1 = init_physics(phys,BH);
-  
-  /* BH is not filled yet so: */
-  Pseti("BH_was_BH_filled?",0);
-  
-  if (Pgeti("BH_did_BH_surface_change?"))
-  {
-    /* fill the hole if we have excised region */
-    if (Pcmpss("grid_set_BH","excised"))
-    {
-      Psets("BH_filler_fields","alphaPsi,psi,B0_U0,B0_U1,B0_U2");
-      physics(ns1,BH_FILL);
-      Pseti("BH_was_BH_filled?",1);
-    }
-  }
-  free_physics(ns1);
-  
-  FUNC_TOC
 }
