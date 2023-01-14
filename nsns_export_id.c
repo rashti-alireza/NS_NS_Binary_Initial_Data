@@ -35,7 +35,7 @@ void nsns_bam_exporting_initial_data(void *vp)
   
   physics(nsns,ADM_UPDATE_Kij);/* before filling */
   /* fill BH */
-  Physics_T *const bh  = init_physics(nsns,BH);
+  Physics_T *const ns1  = init_physics(nsns,BH);
   Psets("BH_filler_method",Pgets(P_ BAM_"filler_method"));
   Pseti("BH_filler_verbose",1);/* make it verbose anyway. */
   /* fill these fields */
@@ -44,8 +44,8 @@ void nsns_bam_exporting_initial_data(void *vp)
                            "adm_Kij_D1D1,adm_Kij_D1D2,adm_Kij_D2D2,"
                            "gConf_D0D0,gConf_D0D1,gConf_D0D2,"
                            "gConf_D1D1,gConf_D1D2,gConf_D2D2");
-  physics(bh,BH_FILL);
-  free_physics(bh);
+  physics(ns1,BH_FILL);
+  free_physics(ns1);
     
   /* set bam fields based on initial data to be usable for bam */
   nsns_set_bam_fields(nsns->grid);

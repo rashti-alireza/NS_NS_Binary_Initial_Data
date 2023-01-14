@@ -52,7 +52,7 @@ void nsns_print_physical_system_properties(Physics_T *const phys,
                                           const int iteration,
                                           const int pr_screen)
 {
-  Physics_T *const bh = init_physics(phys,BH);
+  Physics_T *const ns1 = init_physics(phys,BH);
   Physics_T *const ns2 = init_physics(phys,NS);
 
   if (pr_screen)
@@ -63,11 +63,11 @@ void nsns_print_physical_system_properties(Physics_T *const phys,
   fprintf(file,"# iteration = %d\n",iteration);
   fprintf(file,"\n");
   
-  bh_print_properties(bh,Pgets(P_"BH_properties"),file,pr_screen);
+  bh_print_properties(ns1,Pgets(P_"BH_properties"),file,pr_screen);
   star_print_properties(ns2,Pgets(P_"NS_properties"),file,pr_screen);
   sys_print_properties(phys,Pgets(P_"BHNS_properties"),file,pr_screen);
   
-  free_physics(bh);
+  free_physics(ns1);
   free_physics(ns2);
 }
 
@@ -78,7 +78,7 @@ void nsns_print_physical_system_properties(Physics_T *const phys,
 static void compute_properties(Physics_T *const phys/* nsns */)
 {
   Physics_T *const ns2 = init_physics(phys,NS);
-  Physics_T *const bh = init_physics(phys,BH);
+  Physics_T *const ns1 = init_physics(phys,BH);
   const double x_CM   = Pgetd(P_"x_CM");
   const double y_CM   = Pgetd(P_"y_CM");
   const double z_CM   = Pgetd(P_"z_CM");
@@ -142,29 +142,29 @@ static void compute_properties(Physics_T *const phys/* nsns */)
   Psetd("NS_chi_z",s[2]/Pow2(m));
   
   /* BH: */
-  observe(bh,"Komar(M)",Pgets("BH_Observe_Komar_M"),&m);
+  observe(ns1,"Komar(M)",Pgets("BH_Observe_Komar_M"),&m);
   Psetd("BH_Komar_mass",m);
   
-  observe(bh,"Irreducible(M)",Pgets("BH_Observe_irreducible_M"),im);
+  observe(ns1,"Irreducible(M)",Pgets("BH_Observe_irreducible_M"),im);
   Psetd("BH_irreducible_mass_current",im[0]);
   Psetd("BH_AH_area",im[1]);
   
-  observe(bh,"CM",Pgets("BH_Observe_CM"),cm);
+  observe(ns1,"CM",Pgets("BH_Observe_CM"),cm);
   Psetd("BH_x_CM",cm[0]+x_CM);
   Psetd("BH_y_CM",cm[1]+y_CM);
   Psetd("BH_z_CM",cm[2]+z_CM);
 
-  observe(bh,"ADM(P)",Pgets("BH_Observe_ADM_P"),p);
+  observe(ns1,"ADM(P)",Pgets("BH_Observe_ADM_P"),p);
   Psetd("BH_Px_ADM",p[0]);
   Psetd("BH_Py_ADM",p[1]);
   Psetd("BH_Pz_ADM",p[2]);
 
-  observe(bh,"ADM(J)",Pgets("BH_Observe_ADM_J"),j);
+  observe(ns1,"ADM(J)",Pgets("BH_Observe_ADM_J"),j);
   Psetd("BH_Jx_ADM",j[0]);
   Psetd("BH_Jy_ADM",j[1]);
   Psetd("BH_Jz_ADM",j[2]);
   
-  observe(bh,"spin",Pgets("BH_Observe_spin"),s);
+  observe(ns1,"spin",Pgets("BH_Observe_spin"),s);
   Psetd("BH_Spin_x",s[0]);
   Psetd("BH_Spin_y",s[1]);
   Psetd("BH_Spin_z",s[2]);
@@ -226,5 +226,5 @@ static void compute_properties(Physics_T *const phys/* nsns */)
   }
   
   free_physics(ns2);
-  free_physics(bh);
+  free_physics(ns1);
 }

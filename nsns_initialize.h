@@ -1,7 +1,7 @@
 #include "nsns_header.h"
 #include "maths_equation_solvings_lib.h"
 
-/* index of bh */
+/* index of ns1 */
 #define Ibh (0)
 /* index of ns2 */
 #define Ins (1)

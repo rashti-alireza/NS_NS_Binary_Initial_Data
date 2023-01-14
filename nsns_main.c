@@ -590,14 +590,14 @@ static void set_default_parameters(void)
   }
 }
 
-/* if nessesary fill the bh for interpolation purposes */
+/* if nessesary fill the ns1 for interpolation purposes */
 static void fill_blackhole(Physics_T *const phys)
 {
   if (!phys) return;
  
   FUNC_TIC
   
-  Physics_T *const bh = init_physics(phys,BH);
+  Physics_T *const ns1 = init_physics(phys,BH);
   
   /* BH is not filled yet so: */
   Pseti("BH_was_BH_filled?",0);
@@ -608,11 +608,11 @@ static void fill_blackhole(Physics_T *const phys)
     if (Pcmpss("grid_set_BH","excised"))
     {
       Psets("BH_filler_fields","alphaPsi,psi,B0_U0,B0_U1,B0_U2");
-      physics(bh,BH_FILL);
+      physics(ns1,BH_FILL);
       Pseti("BH_was_BH_filled?",1);
     }
   }
-  free_physics(bh);
+  free_physics(ns1);
   
   FUNC_TOC
 }

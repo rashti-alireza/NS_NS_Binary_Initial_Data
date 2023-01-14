@@ -71,7 +71,7 @@ static Physics_T *infer_new_physics(Physics_T *const old_bhns)
   FUNC_TIC
   
   Physics_T *const nsns = init_physics(0,BHNS);/* the whole system */
-  Physics_T *const bh   = init_physics(nsns,BH);/* BH part */
+  Physics_T *const ns1   = init_physics(nsns,BH);/* BH part */
   Physics_T *const ns2   = init_physics(nsns,NS);/* NS part */
   Physics_T *const old_bh = init_physics(old_bhns,BH);/* BH part */
   Physics_T *const old_ns = init_physics(old_bhns,NS);/* NS part */
@@ -98,7 +98,7 @@ static Physics_T *infer_new_physics(Physics_T *const old_bhns)
   
   /* new grid */
   create_new_grid(grid_char,nsns);
-  bh->grid = nsns->grid;
+  ns1->grid = nsns->grid;
   ns2->grid = nsns->grid;
   
   /* set and update parameters */
@@ -141,14 +141,14 @@ static Physics_T *infer_new_physics(Physics_T *const old_bhns)
   physics(nsns,ADM_UPDATE_AConfIJ);
   
   /* update normal on AH */
-  physics(bh,BH_UPDATE_sConf);
+  physics(ns1,BH_UPDATE_sConf);
   
   /* update matter fields */
   Psets("NS_enthalpy_neat","yes");
   physics(ns2,STRESS_ENERGY_UPDATE);
   
   /* free */
-  free_physics(bh);
+  free_physics(ns1);
   free_physics(ns2);
   free_physics(old_bh);
   free_physics(old_ns);
@@ -164,7 +164,7 @@ static Physics_T *guess_new_physics(void)
   FUNC_TIC
   
   Physics_T *const nsns = init_physics(0,BHNS);/* the whole system */
-  Physics_T *const bh   = init_physics(nsns,BH);/* BH part */
+  Physics_T *const ns1   = init_physics(nsns,BH);/* BH part */
   Physics_T *const ns2   = init_physics(nsns,NS);/* NS part */
   Grid_Char_T *const grid_char = init_grid_char(0);
   
@@ -178,16 +178,16 @@ static Physics_T *guess_new_physics(void)
   physics(nsns,STAR_SET_PARAMS);
   
   /* create grid */
-  bh->grid_char = grid_char;
-  bh->igc       = Ibh;
+  ns1->grid_char = grid_char;
+  ns1->igc       = Ibh;
   ns2->grid_char = grid_char;
   ns2->igc       = Ins;
-  physics(bh,BH_START);
-  physics(bh,BH_FIND_SURFACE);
+  physics(ns1,BH_START);
+  physics(ns1,BH_FIND_SURFACE);
   physics(ns2,STAR_START);
   physics(ns2,STAR_FIND_SURFACE);
   create_new_grid(grid_char,nsns);
-  bh->grid = nsns->grid;
+  ns1->grid = nsns->grid;
   ns2->grid = nsns->grid;
   
   /* add fields */
@@ -217,7 +217,7 @@ static Physics_T *guess_new_physics(void)
   physics(nsns,ADM_UPDATE_AConfIJ);
   
   /* update normal on AH */
-  physics(bh,BH_UPDATE_sConf);
+  physics(ns1,BH_UPDATE_sConf);
   
   /* update stress energy-tensor */
   Psetd("NS_Euler_equation_constant",
@@ -226,7 +226,7 @@ static Physics_T *guess_new_physics(void)
   physics(ns2,STRESS_ENERGY_UPDATE);
   
   /* free */
-  free_physics(bh);
+  free_physics(ns1);
   free_physics(ns2);
   free_grid_char(grid_char);
   
@@ -460,7 +460,7 @@ Physics_T *nsns_read_physics_from_checkpoint(void)
   }
   
   Physics_T *const ns2 = init_physics(nsns,NS);
-  Physics_T *const bh = init_physics(nsns,BH);
+  Physics_T *const ns1 = init_physics(nsns,BH);
   
   /* make the patches */
   make_patches(nsns->grid);
@@ -511,14 +511,14 @@ Physics_T *nsns_read_physics_from_checkpoint(void)
   physics(nsns,ADM_UPDATE_AConfIJ);
   
   /* update normal on AH */
-  physics(bh,BH_UPDATE_sConf);
+  physics(ns1,BH_UPDATE_sConf);
   
   /* update matter fields */
   Psets("NS_enthalpy_neat","yes");
   physics(ns2,STRESS_ENERGY_UPDATE);
   
   free_physics(ns2);
-  free_physics(bh);
+  free_physics(ns1);
 
   FUNC_TOC
   return nsns;

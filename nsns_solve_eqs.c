@@ -19,9 +19,9 @@ void nsns_solve_equation(Physics_T *const phys)
     prepare_dFdu(phys);
   
   /* populate value of inner BC */
-  Physics_T *const bh = init_physics(phys,BH);
-  physics(bh,BH_UPDATE_INNER_BC);
-  free_physics(bh);
+  Physics_T *const ns1 = init_physics(phys,BH);
+  physics(ns1,BH_UPDATE_INNER_BC);
+  free_physics(ns1);
   
   /* initialize */
   physics(phys,EQ_SET_PARAMS);
