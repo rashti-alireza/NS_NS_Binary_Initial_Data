@@ -7,7 +7,7 @@
 
 
 /* initial data for BH-NS binary system */
-int BH_NS_Binary_Initial_Data(void *vp)
+int NS_NS_Binary_Initial_Data(void *vp)
 {
   /* if this is a BAM call */
   if (strcmp_i(PgetsEZ(P_"bam_export_id"),"yes"))
