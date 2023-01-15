@@ -182,11 +182,11 @@ static void field_update(Patch_T *const patch,const char *const name)
   }
   else if (!strcmp(name,"phi1"))
   {
-    partial_derivative_regex(patch,"^dphi1_D.$,^ddphi1_D.D.$");
+    partial_derivative_regex(patch,"^dphi_D.$,^ddphi_D.D.$");
   }
   else if (!strcmp(name,"phi2"))
   {
-    partial_derivative_regex(patch,"^dphi2_D.$,^ddphi2_D.D.$");
+    partial_derivative_regex(patch,"^dphi_D.$,^ddphi_D.D.$");
   }
   else
     Error0(NO_OPTION);

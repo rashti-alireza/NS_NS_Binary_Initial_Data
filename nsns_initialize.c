@@ -143,8 +143,8 @@ static Physics_T *infer_new_physics(Physics_T *const old_nsns)
   /* update derivatives */
   update_partial_derivatives(nsns,".*","^dpsi_D.$,^ddpsi_D.D.$,"
                                       "^dalphaPsi_D.$,^ddalphaPsi_D.D.$");
-  update_partial_derivatives(ns1,"NS1","^dphi1_D.$,^ddphi1_D.D.$");
-  update_partial_derivatives(ns2,"NS2","^dphi2_D.$,^ddphi2_D.D.$");
+  update_partial_derivatives(ns1,"NS1","^dphi_D.$,^ddphi_D.D.$");
+  update_partial_derivatives(ns2,"NS2","^dphi_D.$,^ddphi_D.D.$");
   
   /* update AConf^{ij} */
   physics(nsns,ADM_UPDATE_AConfIJ);
@@ -220,8 +220,8 @@ static Physics_T *guess_new_physics(void)
   /* update derivatives */
   update_partial_derivatives(nsns,".*","^dpsi_D.$,^ddpsi_D.D.$,"
                                       "^dalphaPsi_D.$,^ddalphaPsi_D.D.$");
-  update_partial_derivatives(ns1,"NS1","^dphi1_D.$,^ddphi1_D.D.$");
-  update_partial_derivatives(ns2,"NS2","^dphi2_D.$,^ddphi2_D.D.$");
+  update_partial_derivatives(ns1,"NS1","^dphi_D.$,^ddphi_D.D.$");
+  update_partial_derivatives(ns2,"NS2","^dphi_D.$,^ddphi_D.D.$");
   
   /* update AConf^{ij} */
   physics(nsns,ADM_UPDATE_AConfIJ);
@@ -574,8 +574,8 @@ Physics_T *nsns_read_physics_from_checkpoint(void)
   /* update derivatives */
   update_partial_derivatives(nsns,".*","^dpsi_D.$,^ddpsi_D.D.$,"
                                       "^dalphaPsi_D.$,^ddalphaPsi_D.D.$");
-  update_partial_derivatives(ns1,"NS1","^dphi1_D.$,^ddphi1_D.D.$");
-  update_partial_derivatives(ns2,"NS2","^dphi2_D.$,^ddphi2_D.D.$");
+  update_partial_derivatives(ns1,"NS1","^dphi_D.$,^ddphi_D.D.$");
+  update_partial_derivatives(ns2,"NS2","^dphi_D.$,^ddphi_D.D.$");
   
   /* update AConf^{ij} */
   physics(nsns,ADM_UPDATE_AConfIJ);
@@ -608,10 +608,10 @@ static void initialize_fields_using_previous_solve
   
   /* matter fields */
   interpolate_fields_from_old_grid_to_new_grid
-    (mygrid(old_ns1,"NS1,NS1_around_IB"),mygrid(new_ns1,"NS1"),"phi1,enthalpy",0);
+    (mygrid(old_ns1,"NS1,NS1_around_IB"),mygrid(new_ns1,"NS1"),"phi,enthalpy",0);
   
   interpolate_fields_from_old_grid_to_new_grid
-    (mygrid(old_ns2,"NS2,NS2_around_IB"),mygrid(new_ns2,"NS2"),"phi2,enthalpy",0);
+    (mygrid(old_ns2,"NS2,NS2_around_IB"),mygrid(new_ns2,"NS2"),"phi,enthalpy",0);
   
   /* if resolution changed */
   if(Pgeti(P_"did_resolution_change?"))
