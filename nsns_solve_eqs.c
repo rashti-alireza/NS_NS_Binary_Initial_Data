@@ -1,6 +1,6 @@
 /*
 // Alireza Rashti
-// January 2021
+// January 2023
 */
 
 /* solving physics equations (elliptic solve) */
@@ -17,11 +17,6 @@ void nsns_solve_equation(Physics_T *const phys)
   /* prepare dF/du if asked */
   if (!Pcmps(P_"dF/du_prepare","none"))
     prepare_dFdu(phys);
-  
-  /* populate value of inner BC */
-  Physics_T *const ns1 = init_physics(phys,BH);
-  physics(ns1,BH_UPDATE_INNER_BC);
-  free_physics(ns1);
   
   /* initialize */
   physics(phys,EQ_SET_PARAMS);
@@ -148,7 +143,7 @@ static int stop_criteria(Grid_T *const grid,const char *const name)
 /* how update sourc */
 static void source_update(Grid_T *const grid,const char *const name)
 {
-  Physics_T *const nsns = init_physics(0,BHNS);
+  Physics_T *const nsns = init_physics(0,NSNS);
   nsns->grid            = grid;
   
   physics(nsns,ADM_UPDATE_AConfIJ);
@@ -185,9 +180,13 @@ static void field_update(Patch_T *const patch,const char *const name)
     partial_derivative_regex(patch,"^dB0_U2D.$,^ddB0_U2D.D.$");
     adm_update_beta_U2(patch);
   }
-  else if (!strcmp(name,"phi"))
+  else if (!strcmp(name,"phi1"))
   {
-    partial_derivative_regex(patch,"^dphi_D.$,^ddphi_D.D.$");
+    partial_derivative_regex(patch,"^dphi1_D.$,^ddphi1_D.D.$");
+  }
+  else if (!strcmp(name,"phi2"))
+  {
+    partial_derivative_regex(patch,"^dphi2_D.$,^ddphi2_D.D.$");
   }
   else
     Error0(NO_OPTION);
