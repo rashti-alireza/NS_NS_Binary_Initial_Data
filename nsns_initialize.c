@@ -1,6 +1,6 @@
 /*
 // Alireza Rashti
-// January 2021
+// January 2023
 */
 
 /* various functions needed to make a physics object for BH-NS */
@@ -77,9 +77,9 @@ static Physics_T *infer_new_physics(Physics_T *const old_bhns)
   Physics_T *const old_ns = init_physics(old_bhns,NS);/* NS part */
   Grid_Char_T *const grid_char = init_grid_char(0);
   old_bh->grid_char = grid_char;
-  old_bh->igc       = Ibh;
+  old_bh->igc       = Ins1;
   old_ns->grid_char = grid_char;
-  old_ns->igc       = Ins;
+  old_ns->igc       = Ins2;
   
   /* update, adjust and tune */
   Psets("NS_enthalpy_neat","no");
@@ -179,9 +179,9 @@ static Physics_T *guess_new_physics(void)
   
   /* create grid */
   ns1->grid_char = grid_char;
-  ns1->igc       = Ibh;
+  ns1->igc       = Ins1;
   ns2->grid_char = grid_char;
-  ns2->igc       = Ins;
+  ns2->igc       = Ins2;
   physics(ns1,BH_START);
   physics(ns1,BH_FIND_SURFACE);
   physics(ns2,STAR_START);
@@ -262,22 +262,22 @@ static void
   // known yet */
   if (Pcmps("grid_BH_central_box_length","auto"))
     Psetd("grid_BH_central_box_length",
-          bh_box_len_ratio*grid_char->params[Ibh]->r_min);
+          bh_box_len_ratio*grid_char->params[Ins1]->r_min);
           
   if (Pcmps("grid_NS_central_box_length","auto"))
     Psetd("grid_NS_central_box_length",
-          ns_box_len_ratio*grid_char->params[Ins]->r_min);
+          ns_box_len_ratio*grid_char->params[Ins2]->r_min);
   
   /* separation */
   grid_char->S              = Pgetd("BHNS_separation");
   /* BH */
-  grid_char->params[Ibh]->l = Pgetd("grid_BH_central_box_length");
-  grid_char->params[Ibh]->w = Pgetd("grid_BH_central_box_length");
-  grid_char->params[Ibh]->h = Pgetd("grid_BH_central_box_length");
+  grid_char->params[Ins1]->l = Pgetd("grid_BH_central_box_length");
+  grid_char->params[Ins1]->w = Pgetd("grid_BH_central_box_length");
+  grid_char->params[Ins1]->h = Pgetd("grid_BH_central_box_length");
   /* NS */
-  grid_char->params[Ins]->l = Pgetd("grid_NS_central_box_length");
-  grid_char->params[Ins]->w = Pgetd("grid_NS_central_box_length");
-  grid_char->params[Ins]->h = Pgetd("grid_NS_central_box_length");
+  grid_char->params[Ins2]->l = Pgetd("grid_NS_central_box_length");
+  grid_char->params[Ins2]->w = Pgetd("grid_NS_central_box_length");
+  grid_char->params[Ins2]->h = Pgetd("grid_NS_central_box_length");
     
   /* save the values for a rainy day */
   if (Pgeti("NS_did_NS_surface_finder_work?"))
@@ -289,7 +289,7 @@ static void
         PgetddEZ("NS_surface_R|realClm")  && 
         PgetddEZ("NS_surface_R|imagClm")  &&
         /* if the old and new have the same lmax */
-        PgetiEZ("NS_surface_R|lmax") == (int)grid_char->params[Ins]->lmax
+        PgetiEZ("NS_surface_R|lmax") == (int)grid_char->params[Ins2]->lmax
        )
     {
       lmax = (Uint)Pgeti("NS_surface_R|lmax");
@@ -297,8 +297,8 @@ static void
       const double *realClm = Pgetdd("NS_surface_R|realClm");
       const double *imagClm = Pgetdd("NS_surface_R|imagClm");
       /* diff between old and new */
-      double dreal = L2_norm(n,realClm,grid_char->params[Ins]->relClm);
-      double dimag = L2_norm(n,imagClm,grid_char->params[Ins]->imgClm);
+      double dreal = L2_norm(n,realClm,grid_char->params[Ins2]->relClm);
+      double dimag = L2_norm(n,imagClm,grid_char->params[Ins2]->imgClm);
       /* relative change df/f */
       rel_change = (dreal+dimag) /
                    (L2_norm(n,realClm,0)+L2_norm(n,imagClm,0));
@@ -312,12 +312,12 @@ static void
     /* save new values if ns2 surface must change */
     if (update_ns_surface)
     {
-      n = Ncoeffs_Ylm(grid_char->params[Ins]->lmax);
+      n = Ncoeffs_Ylm(grid_char->params[Ins2]->lmax);
       update_parameter_array("NS_surface_R|realClm",
-                             grid_char->params[Ins]->relClm,n);
+                             grid_char->params[Ins2]->relClm,n);
       update_parameter_array("NS_surface_R|imagClm",
-                             grid_char->params[Ins]->imgClm,n);
-      Pseti("NS_surface_R|lmax",(int)grid_char->params[Ins]->lmax);
+                             grid_char->params[Ins2]->imgClm,n);
+      Pseti("NS_surface_R|lmax",(int)grid_char->params[Ins2]->lmax);
       Pseti("NS_did_NS_surface_change?",1);
     }
     else
@@ -336,15 +336,15 @@ static void
   }
   
   /* check central box length */
-  if (grid_char->params[Ins]->l > grid_char->params[Ins]->r_min/2. ||
-      grid_char->params[Ins]->w > grid_char->params[Ins]->r_min/2. ||
-      grid_char->params[Ins]->h > grid_char->params[Ins]->r_min/2.)
+  if (grid_char->params[Ins2]->l > grid_char->params[Ins2]->r_min/2. ||
+      grid_char->params[Ins2]->w > grid_char->params[Ins2]->r_min/2. ||
+      grid_char->params[Ins2]->h > grid_char->params[Ins2]->r_min/2.)
     Error0("NS central box is too big!");
   
   /* check central box length */
-  if (grid_char->params[Ibh]->l > grid_char->params[Ibh]->r_min/2. ||
-      grid_char->params[Ibh]->w > grid_char->params[Ibh]->r_min/2. ||
-      grid_char->params[Ibh]->h > grid_char->params[Ibh]->r_min/2.)
+  if (grid_char->params[Ins1]->l > grid_char->params[Ins1]->r_min/2. ||
+      grid_char->params[Ins1]->w > grid_char->params[Ins1]->r_min/2. ||
+      grid_char->params[Ins1]->h > grid_char->params[Ins1]->r_min/2.)
     Error0("BH central box is too big!");
   
   set_params_of_split_cubed_spherical_grid(grid_char);

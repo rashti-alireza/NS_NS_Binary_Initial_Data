@@ -2,9 +2,9 @@
 #include "maths_equation_solvings_lib.h"
 
 /* index of ns1 */
-#define Ibh (0)
+#define Ins1 (0)
 /* index of ns2 */
-#define Ins (1)
+#define Ins2 (1)
 
 /* encapsulate use last NS surface for multiple uses */
 #define USE_LAST_NS_SURFACE() \
