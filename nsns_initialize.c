@@ -173,8 +173,8 @@ static Physics_T *guess_new_physics(void)
   FUNC_TIC
   
   Physics_T *const nsns = init_physics(0,NSNS);/* the whole system */
-  Physics_T *const ns1   = init_physics(nsns,NS1);/* NS part */
-  Physics_T *const ns2   = init_physics(nsns,NS2);/* NS part */
+  Physics_T *const ns1  = init_physics(nsns,NS1);/* NS part */
+  Physics_T *const ns2  = init_physics(nsns,NS2);/* NS part */
   Grid_Char_T *const grid_char = init_grid_char(0);
   
   /* set parameters */
