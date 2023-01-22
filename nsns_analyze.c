@@ -84,7 +84,6 @@ static void compute_properties(Physics_T *const phys/* nsns */)
   const double x_CM = Pgetd(P_"x_CM");
   const double y_CM = Pgetd(P_"y_CM");
   const double z_CM = Pgetd(P_"z_CM");
-  double im[2] = {0.};
   double p[3]  = {0.};
   double j[3]  = {0.};
   double s[3]  = {0.};
