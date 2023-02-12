@@ -15,7 +15,7 @@ void nsns_bam_exporting_initial_data(void *vp)
   FUNC_TIC
   
   Physics_T *nsns    = 0;
-  ID_Export_T *points = idexp_init();
+  ID_Reader_T *points = idr_init();
   FILE *file          = 0;
   char fields_name[STR_LEN_MAX] = {'\0'};
   char **sfield = 0;
@@ -51,11 +51,11 @@ void nsns_bam_exporting_initial_data(void *vp)
   nsns_set_bam_fields(nsns->grid);
  
   /* read (x,y,x) points from bam file to be interpolated on them */
-  idexp_load_Cartesian_coordinates_from_file
+  idr_load_Cartesian_coordinates_from_file
     (Pgets(P_ BAM_"coords_file_path"),points);
   
   /* open a binary file to write fields in it. */
-  file = idexp_new_binary_file_to_write
+  file = idr_new_binary_file_to_write
     (Pgets(P_ BAM_"fields_file_path"),Pgets(P_ BAM_"fields_name"));
   
   /* adapt fields_notations for Elliptica */
@@ -105,12 +105,12 @@ void nsns_bam_exporting_initial_data(void *vp)
   free_2d(sfield);
   
   /* write into file */
-  idexp_interpolate_fields_and_write_to_file
+  idr_interpolate_fields_and_write_to_file
     (file,points,fields_name,Pgets(P_ BAM_"fields_name"));
   
   /* finishing up */
-  idexp_close_file(file);
-  idexp_free(points);
+  idr_close_file(file);
+  idr_free(points);
   free_physics(nsns);
   
   UNUSED(vp);
