@@ -120,7 +120,6 @@ Symm[igConf(i,j)    = igConf(j,i)];
 `  FOR_ALL_ijk`
 `  {`
    psi4   = psi**4;
-   psim4  = 1./psi4;
 
 # alpha:
 `   evo_alpha[ijk] = alphaPsi[ijk]/psi[ijk];`
@@ -153,9 +152,10 @@ Symm[igConf(i,j)    = igConf(j,i)];
 
 `  FOR_ALL_ijk`
 `  {`
+   psim4_ns1   = psi**(-4);
 
    # grhd_v^i:
-   grhd_v_ns1(i) = (psim4*igConf(i,j)*dphi(-j)+W(i))/(evo_alpha*enthalpy*u0);
+   grhd_v_ns1(i) = (psim4_ns1*igConf(i,j)*dphi(-j)+W(i))/(evo_alpha*enthalpy*u0);
    Cpopulate[evo_grhd_v = grhd_v_ns1];
 
    # total_energy_density = grhd_rho(1+grhd_epsl)
@@ -186,9 +186,10 @@ Symm[igConf(i,j)    = igConf(j,i)];
 
 `  FOR_ALL_ijk`
 `  {`
+   psim4_ns2   = psi**(-4);
 
    # grhd_v^i:
-   grhd_v_ns2(i) = (psim4*igConf(i,j)*dphi(-j)+W(i))/(evo_alpha*enthalpy*u0);
+   grhd_v_ns2(i) = (psim4_ns2*igConf(i,j)*dphi(-j)+W(i))/(evo_alpha*enthalpy*u0);
    Cpopulate[evo_grhd_v = grhd_v_ns2];
 
    # total_energy_density = grhd_rho(1+grhd_epsl)

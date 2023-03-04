@@ -86,9 +86,6 @@ void nsns_set_evo_fields_generic(Grid_T *const grid)
   double psi4 =
 pow(psi[ijk], 4);
 
-  double psim4 =
-1.0/psi4;
-
    evo_alpha[ijk] = alphaPsi[ijk]/psi[ijk];
    evo_beta_U0[ijk] = beta_U0[ijk];
    evo_beta_U1[ijk] = beta_U1[ijk];
@@ -150,18 +147,21 @@ adm_Kij_D2D2[ijk];
   EoS_T *eos     = init_EoS(ns1);
   FOR_ALL_ijk
   {
+  double psim4_ns1 =
+pow(psi[ijk], -4);
+
   double grhd_v_ns1_U0 =
-(W_U0[ijk] + psim4*(dphi_D0[ijk]*igConf_U0U0[ijk] + dphi_D1[ijk]*
+(W_U0[ijk] + psim4_ns1*(dphi_D0[ijk]*igConf_U0U0[ijk] + dphi_D1[ijk]*
 igConf_U0U1[ijk] + dphi_D2[ijk]*igConf_U0U2[ijk]))/(enthalpy[ijk]*
 evo_alpha[ijk]*u0[ijk]);
 
   double grhd_v_ns1_U1 =
-(W_U1[ijk] + psim4*(dphi_D0[ijk]*igConf_U0U1[ijk] + dphi_D1[ijk]*
+(W_U1[ijk] + psim4_ns1*(dphi_D0[ijk]*igConf_U0U1[ijk] + dphi_D1[ijk]*
 igConf_U1U1[ijk] + dphi_D2[ijk]*igConf_U1U2[ijk]))/(enthalpy[ijk]*
 evo_alpha[ijk]*u0[ijk]);
 
   double grhd_v_ns1_U2 =
-(W_U2[ijk] + psim4*(dphi_D0[ijk]*igConf_U0U2[ijk] + dphi_D1[ijk]*
+(W_U2[ijk] + psim4_ns1*(dphi_D0[ijk]*igConf_U0U2[ijk] + dphi_D1[ijk]*
 igConf_U1U2[ijk] + dphi_D2[ijk]*igConf_U2U2[ijk]))/(enthalpy[ijk]*
 evo_alpha[ijk]*u0[ijk]);
 
@@ -192,18 +192,21 @@ evo_alpha[ijk]*u0[ijk]);
   EoS_T *eos     = init_EoS(ns2);
   FOR_ALL_ijk
   {
+  double psim4_ns2 =
+pow(psi[ijk], -4);
+
   double grhd_v_ns2_U0 =
-(W_U0[ijk] + psim4*(dphi_D0[ijk]*igConf_U0U0[ijk] + dphi_D1[ijk]*
+(W_U0[ijk] + psim4_ns2*(dphi_D0[ijk]*igConf_U0U0[ijk] + dphi_D1[ijk]*
 igConf_U0U1[ijk] + dphi_D2[ijk]*igConf_U0U2[ijk]))/(enthalpy[ijk]*
 evo_alpha[ijk]*u0[ijk]);
 
   double grhd_v_ns2_U1 =
-(W_U1[ijk] + psim4*(dphi_D0[ijk]*igConf_U0U1[ijk] + dphi_D1[ijk]*
+(W_U1[ijk] + psim4_ns2*(dphi_D0[ijk]*igConf_U0U1[ijk] + dphi_D1[ijk]*
 igConf_U1U1[ijk] + dphi_D2[ijk]*igConf_U1U2[ijk]))/(enthalpy[ijk]*
 evo_alpha[ijk]*u0[ijk]);
 
   double grhd_v_ns2_U2 =
-(W_U2[ijk] + psim4*(dphi_D0[ijk]*igConf_U0U2[ijk] + dphi_D1[ijk]*
+(W_U2[ijk] + psim4_ns2*(dphi_D0[ijk]*igConf_U0U2[ijk] + dphi_D1[ijk]*
 igConf_U1U2[ijk] + dphi_D2[ijk]*igConf_U2U2[ijk]))/(enthalpy[ijk]*
 evo_alpha[ijk]*u0[ijk]);
 
