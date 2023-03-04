@@ -28,8 +28,6 @@
 
 Physics_T *nsns_initialize_new_physics(Physics_T *const phys);
 void nsns_add_fields(Physics_T *const phys,const char *const region);
-void nsns_bam_exporting_initial_data(void *vp);
-
 void nsns_print_physical_system_properties(Physics_T *const phys,
                                           FILE *const file,
                                           const int iteration,

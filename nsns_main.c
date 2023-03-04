@@ -9,14 +9,7 @@
 /* initial data for NS-NS binary system */
 int NS_NS_Binary_Initial_Data(void *vp)
 {
-  /* if this is a BAM call */
-  if (strcmp_i(PgetsEZ(P_"bam_export_id"),"yes"))
-    nsns_bam_exporting_initial_data(vp);
-  
-  /* otherwise construct initial data */
-  else
-    construct_initial_data(vp);
-  
+  construct_initial_data(vp);
   return EXIT_SUCCESS;
 }
 
