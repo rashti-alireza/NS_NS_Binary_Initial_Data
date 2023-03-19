@@ -13,6 +13,9 @@ void nsns_export_id_generic(void *vp)
 {
   FUNC_TIC
   
+  // sanity check
+  assert(vp && "The input is null!");  
+  
   Elliptica_ID_Reader_T *const idr = vp;
   Physics_T *nsns = 0;
   ID_Reader_T *points = idr_init();
