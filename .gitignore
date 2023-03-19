@@ -1,5 +1,6 @@
-# Ignore the following:
-
-# gnu make
+## ignore submakes
 makefile
+.sub_makefile
 
+## joe's
+DEADJOE
