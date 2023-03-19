@@ -9,10 +9,11 @@
 
 
 /* export ID for a general evolution code */
-void nsns_export_id_generic(Elliptica_ID_Reader_T *const idr)
+void nsns_export_id_generic(void *vp)
 {
   FUNC_TIC
   
+  Elliptica_ID_Reader_T *const idr = vp;
   Physics_T *nsns = 0;
   ID_Reader_T *points = idr_init();
   double CM[3] = {0.};

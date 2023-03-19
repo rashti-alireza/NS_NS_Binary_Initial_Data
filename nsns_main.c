@@ -9,7 +9,14 @@
 /* initial data for NS-NS binary system */
 int NS_NS_Binary_Initial_Data(void *vp)
 {
-  construct_initial_data(vp);
+  /* if this is a generic ID reader call */
+  if (strcmp_i(PgetsEZ("IDR_NSNS_export_id"),"generic"))
+    nsns_export_id_generic(vp);
+  
+  /* otherwise construct initial data */
+  else
+    construct_initial_data(vp);
+  
   return EXIT_SUCCESS;
 }
 
