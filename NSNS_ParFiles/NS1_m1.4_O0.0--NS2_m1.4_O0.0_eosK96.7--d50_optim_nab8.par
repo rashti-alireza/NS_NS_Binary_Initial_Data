@@ -24,7 +24,7 @@ NS1_EoS_type                    = polytropic
 NS1_EoS_unit                    = geo
 NS1_EoS_K0                      = [96.7]
 NS1_EoS_Gamma                   = [2]
-NS1_Omega_x             	= 0.
+NS1_Omega_x                     = 0.
 NS1_Omega_y                     = 0.
 NS1_Omega_z                     = 0.
 
@@ -51,7 +51,7 @@ NS2_EoS_type                    = polytropic
 NS2_EoS_unit                    = geo
 NS2_EoS_K0                      = [96.7]
 NS2_EoS_Gamma                   = [2]
-NS2_Omega_x             	= 0.
+NS2_Omega_x                     = 0.
 NS2_Omega_y                     = 0.
 NS2_Omega_z                     = 0.
 NS2_surface_type                = perfect_s2->topology_s2

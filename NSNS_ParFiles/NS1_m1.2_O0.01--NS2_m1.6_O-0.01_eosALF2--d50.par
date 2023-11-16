@@ -100,8 +100,8 @@ checkpoint_every = 0h
 #### basics:
 Derivative_Method               = Spectral
 Interpolation_Method            = Spectral
-Fourier_Transformation_Method   = RFT 
-dF/du_for_Newton_Method         = Spectral 
+Fourier_Transformation_Method   = RFT
+dF/du_for_Newton_Method         = Spectral
 
 #-----------------------------------------------------------------------#
 # Grid and Geometry:                                                    #
