@@ -41,9 +41,9 @@ NSNS_P_ADM_control_threshold     = 10
 NS1_baryonic_mass               = {NS1_baryonic_mass}
 NS1_EoS_description             = custom_tab_eos
 NS1_EoS_type                    = tabular
-NS1_EoS_unit                    = geo
+NS1_EoS_unit                    = compose
 NS1_EoS_table_path              = {NS1_EoS_table_path}
-NS1_EoS_table_format            = rest_mass_density,specific_internal_energy,pressure
+NS1_EoS_table_format            = line,number_density,total_energy_density,pressure
 NS1_EoS_interpolation_method    = Hermite1D
 NS1_EoS_interpolation_use_log   = yes
 NS1_EoS_Hermite1D_FD_accuracy   = 3
@@ -73,9 +73,9 @@ NS1_start_off                   = TOV
 NS2_baryonic_mass               = {NS2_baryonic_mass}
 NS2_EoS_description             = custom_tab_eos
 NS2_EoS_type                    = tabular
-NS2_EoS_unit                    = geo
+NS2_EoS_unit                    = compose
 NS2_EoS_table_path              = {NS2_EoS_table_path}
-NS2_EoS_table_format            = rest_mass_density,specific_internal_energy,pressure
+NS2_EoS_table_format            = line,number_density,total_energy_density,pressure
 NS2_EoS_interpolation_method    = Hermite1D
 NS2_EoS_interpolation_use_log   = yes
 NS2_EoS_Hermite1D_FD_accuracy   = 3
@@ -314,8 +314,8 @@ def eos(args: dict) -> dict:
   ind_h = np.where(h_new >= 1)
   h = h_new[ind_h]
   tab["file"] = fout
-  tab["floor"] = h[0]
-  tab["ceiling"] = h_new[-2]
+  tab["floor"] = h[5]
+  tab["ceiling"] = h[-5]
 
   return tab
 
